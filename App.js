@@ -25,8 +25,9 @@ function TabNav() {
     <Tab.Navigator
       initialRouteName={homeName}
       screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color }) => {
+        tabBarIcon: ({ focused }) => {
           let iconName;
+          let color = '#1AB28E';
 
           if (route.name === 'Inicio') {
             iconName = focused ? 'home' : 'home-outline';
@@ -42,9 +43,9 @@ function TabNav() {
 
           return <Ionicons name={iconName} size={'20px'} color={color} />;
         },
-        activeTintColor: '#0A9FAC',
+        activeTintColor: '#1AB28E',
         inactiveTintColor: 'grey',
-        labelStyle: { paddingBottom: 10, fontSize: '15px' },
+        labelStyle: { paddingBottom: 10, fontSize: 15 },
         style: { padding: 10, height: 70, }
       })}
     >
