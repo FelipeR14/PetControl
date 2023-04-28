@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, NativeBaseProvider,FormControl,Button,Input,} from "native-base";
 
-const Register = () => {
-    const [user, onChangeUser] = React.useState('');
+const Login = () => {
     const [email, onChangeEmail] = React.useState('');
     const [passw, onChangePassw] = React.useState('');
 
@@ -11,16 +10,12 @@ const Register = () => {
         <View style={styles.VistaPrincipal}>
             <View style={{width:'100%',height:'auto',flexDirection:'row',justifyContent:'space-between',paddingLeft:10}}>
                 <View style={{paddingTop:20}}>
-                    <Text style={{fontSize:'30px',fontWeight:'600',color:'#1AB28E'}}> Register </Text>
+                    <Text style={{fontSize:'30px',fontWeight:'600',color:'#1AB28E'}}> Login </Text>
                 </View>
                 <View style={{backgroundColor:'#1AB28E',width:'10%',height:'100%',borderBottomStartRadius:100}}>                    
                 </View>
             </View>
             <View style={{flexDirection:'column',paddingLeft:20,paddingTop:60,width:'90%'}}>
-                <FormControl mb="4">
-                    <Text style={{fontSize:'10px',fontWeight:'500',color:'#A5A5A5'}}>Username</Text>
-                    <Input variant="underlined" style={styles.input} onChangeText={onChangeUser} value={user} placeholder="Your username" />
-                </FormControl>
                 <FormControl mb="4">
                     <Text style={{fontSize:'10px',fontWeight:'500',color:'#A5A5A5'}}>Email</Text>
                     <Input variant="underlined" style={styles.input} onChangeText={onChangeEmail} value={email} placeholder="Your email" />
@@ -31,11 +26,11 @@ const Register = () => {
                 </FormControl>
             </View>
             <View style={styles.divBtns}>
-                <Button style={styles.btnLog} _text={{ color: "white",fontSize:'15px',fontWeight:500 }} onPress={() => ValidarRegistro()}> Save  </Button>
+                <Button style={styles.btnLog} _text={{ color: "white",fontSize:'15px',fontWeight:500 }} onPress={() => ValidarLog()}> Login  </Button>
                 <View style={{flexDirection:'row',alignItems:'center',padding:5}}>
                     <Text style={{color:'#1AB28E',fontWeight:'bold'}}> or </Text>
                 </View>
-                <Button style={styles.btnReg} _text={{ color: "#1AB28E",fontSize:'15px',fontWeight:500  }} onPress={() => irLogin()}> Login  </Button>  
+                <Button style={styles.btnReg} _text={{ color: "#1AB28E",fontSize:'15px',fontWeight:500  }} onPress={() => irRegister()}> Register  </Button>  
             </View>
             
         </View>
@@ -45,7 +40,7 @@ const Register = () => {
 export default () => {
     return (
         <NativeBaseProvider>
-            <Register />
+            <Login />
         </NativeBaseProvider>
     );
 };
@@ -55,7 +50,7 @@ const styles = StyleSheet.create({
     VistaPrincipal: { height: '100%', width: '100%', backgroundColor: 'white', flexDirection:'column'
     },
     divBtns: {
-        flexDirection:'column',alignItems:'center',width:'100%',paddingTop:40
+        flexDirection:'column',alignItems:'center',width:'100%',paddingTop:60
     }, 
     btnLog: {
         backgroundColor: "#1AB28E",

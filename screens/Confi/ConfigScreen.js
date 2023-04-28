@@ -1,14 +1,124 @@
-import * as React from 'react';
-import { Box, Heading, Image, Text,View, Center, HStack, Stack, NativeBaseProvider, ScrollView,Spacer } from "native-base";
-import Ionicons from 'react-native-vector-icons/Ionicons';
+import React, { useState } from 'react';
+import { StyleSheet, View, Switch, Modal } from 'react-native';
+import { Box, Image, Text, NativeBaseProvider, ScrollView, Spacer, Avatar, Button, FormControl, Input } from "native-base";
 
 const ConfigScreen = () => {
-    return <View>
-        <Text> Config Screen! </Text>
-    </View>
-        
-    
+    const [isEnabled, setIsEnabled] = useState(false);
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const [isEnabled2, setIsEnabled2] = useState(false);
+    const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
+
+    const [modalVisible, setModalVisible] = useState(false);
+    const [name, onChangeName] = React.useState('Felipe Rios');
+    const [email, onChangeEmail] = React.useState('jaretrios14@gmail.com');
+    const [tel, onChangeTel] = React.useState('449 265 3531');
+    const [dire, onChangeDire] = React.useState('Pozo Alto #121, Pozo Bravo Norte');
+
+    return (
+        <View style={styles.VistaPrincipal}>
+            <View style={styles.divPerfil}>
+                <Avatar style={styles.avatar} source={require('../../img/foto.jpg')} > </Avatar>
+                <Spacer height={2} />
+                <Text style={styles.datoprin}> {name}</Text>
+                <Text style={styles.datossec}> {email} </Text>
+                <Text style={styles.datossec}> {tel} </Text>
+                <Text style={styles.datossec}> {name} </Text>
+                <Spacer height={2} />
+                <Button style={styles.btnEditPerf} onPress={() => setModalVisible(true)}> Editar perfil </Button>
+            </View>
+            <View style={styles.divConfigs}>
+                <View style={styles.divNotis}>
+                    <View style={styles.divEncabe}>
+                        <Text style={styles.textEncabe}> NOTIFICACIONES </Text>
+                    </View>
+                    <View style={styles.divSecc}>
+                        <Text style={styles.textSecc}> Publicaciones </Text>
+                        <Switch
+                            trackColor={{ false: '#767577', true: '#81b0ff' }}
+                            thumbColor={isEnabled ? '#f5dd4b' : '#f4f3f4'}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch}
+                            value={isEnabled}
+                            style={{ width: '10px', height: '17px' }}
+                        />
+                    </View>
+                    <View style={styles.divSecc}>
+                        <Box style={{ width: '100%', height: '3px', backgroundColor: '#E9EDEE', padding: '10' }}></Box>
+                    </View>
+                    <View style={styles.divSecc}>
+                        <Text style={styles.textSecc}> Recordatorios </Text>
+                        <Switch
+                            trackColor={{ false: '#767577', true: '#81b0ff' }}
+                            thumbColor={isEnabled2 ? '#f5dd4b' : '#f4f3f4'}
+                            ios_backgroundColor="#3e3e3e"
+                            onValueChange={toggleSwitch2}
+                            value={isEnabled2}
+                            style={{ width: '10px', height: '17px' }}
+                        />
+                    </View>
+                </View>
+                <Spacer height={1} />
+                <View style={styles.divNotis}>
+                    <View style={styles.divEncabe}>
+                        <Text style={styles.textEncabe}> TÉRMINOS Y CONDICIONES </Text>
+                    </View>
+                    <View style={styles.divSecc}>
+                        <Text style={styles.textSecc}> Avisos de privacidad </Text>
+                    </View>
+                    <View style={styles.divSecc}>
+                        <Box style={{ width: '100%', height: '3px', backgroundColor: '#E9EDEE', padding: '10' }}></Box>
+                    </View>
+                </View>
+                <Spacer height={1} />
+                <View style={styles.divNotis}>
+                    <View style={styles.divEncabe}>
+                        <Text style={styles.textEncabe}> SESIÓN </Text>
+                    </View>
+                    <View style={styles.divSecc}>
+                        <Text style={styles.textSecc}> Cerrar Sesión </Text>
+                    </View>
+                    <View style={styles.divSecc}>
+                        <Box style={{ width: '100%', height: '3px', backgroundColor: '#E9EDEE', padding: '10' }}></Box>
+                    </View>
+                </View>
+            </View>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}>
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <Text style={styles.tituloModal}>Editando datos</Text>
+                        <Image style={styles.fotoperfil} source={require('../../img/foto.jpg')} />
+                        <FormControl mb="2" mt="5">
+                            <Text style={{ fontSize: '10px', fontWeight: '500' }}>Nombre</Text>
+                            <Input variant="underlined"  w={'90%'} onChangeText={onChangeName} value={name}/>
+                        </FormControl>
+                        <FormControl mb="2">
+                            <Text style={{ fontSize: '10px', fontWeight: '500' }}>Email</Text>
+                            <Input variant="underlined"  w={'90%'} onChangeText={onChangeEmail} value={email}/>
+                        </FormControl>
+                        <FormControl mb="2">
+                            <Text style={{fontSize:'10px',fontWeight:'500'}}>Teléfono</Text>
+                            <Input variant="underlined" w={'90%'} onChangeText={onChangeTel} value={tel}/>
+                        </FormControl>
+                        <FormControl mb="5">
+                            <Text style={{fontSize:'10px',fontWeight:'500'}}>Dirección</Text>
+                            <Input variant="underlined"  w={'90%'} onChangeText={onChangeDire} value={dire}/>
+                        </FormControl>
+                        <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'space-around' }}>
+                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalVisible(!modalVisible)}> Guardar  </Button>
+                            <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setModalVisible(!modalVisible)}> Cancelar  </Button>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+        </View>
+
+
+    );
 }
+
 export default () => {
     return (
         <NativeBaseProvider>
@@ -16,3 +126,126 @@ export default () => {
         </NativeBaseProvider>
     );
 };
+
+const styles = StyleSheet.create({
+    VistaPrincipal: {
+        height: '100%',
+        width: '100%',
+        backgroundColor: 'white',
+    },
+    divPerfil: {
+        padding: 10,
+        alignItems: 'center',
+        flexDirection: 'column',
+    },
+    avatar: {
+        width: '70px',
+        height: '70px',
+    },
+    datoprin: {
+        fontSize: '13px',
+        fontWeight: 'bold',
+        color: '#323232'
+    },
+    datossec: {
+        fontSize: '10px',
+        color: '#6E6F6F',
+        fontWeight: '400'
+    },
+    btnEditPerf: {
+        backgroundColor: "#1AB28E",
+        color: 'blue',
+        borderRadius: '20px',
+        height: '30px',
+        fontWeight: 'bold',
+        justifyContent: 'center',
+        alignContent: 'center'
+    },
+
+    divConfigs: {
+        padding: 10,
+
+    },
+    divEncabe: {
+        width: '100%',
+        height: '25px',
+        padding: 5,
+        backgroundColor: '#F1F1F1',
+        borderRadius: '3px',
+
+    },
+    textEncabe: {
+        color: '#6E6F6F',
+        fontWeight: '600',
+        fontSize: '10px'
+    },
+    divSecc: {
+        padding: 5,
+        fontSize: '10px',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    divNotis: {
+        flexDirection: 'column',
+    },
+    textSecc: {
+        fontSize: '11px',
+        fontWeight: '600',
+        color: '#323232'
+
+    },
+    centeredView: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
+    },
+    modalView: {
+        backgroundColor: 'white',
+        borderRadius: 10,
+        paddingBottom: 15,
+        paddingLeft: 40,
+        paddingRight: 40,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    btnGuardar: {
+        backgroundColor: "#1AB28E",
+        borderRadius: 5,
+        height: '30px',
+        fontWeight: 'bold',
+        justifyContent: 'center',
+        alignContent: 'center'
+    },
+    btnCancelar: {
+        backgroundColor: "white",
+        borderWidth: 2,
+        borderColor: '#1AB28E',
+        borderRadius: 5,
+        height: '30px',
+        fontWeight: 'bold',
+        justifyContent: 'center',
+        alignContent: 'center'
+    },
+    tituloModal: {
+        marginTop: 10,
+        marginBottom: 10,
+        textAlign: 'center',
+        fontWeight: '500',
+        color: '#1AB28E',
+
+    },
+    fotoperfil: {
+        width: '110px', height: '110px', borderRadius: 5
+
+    }
+
+
+});
