@@ -5,7 +5,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Table, Row } from 'react-native-table-component';
 
 
-const Cartilla = () => {
+const Cartilla = ({navigation}) => {
 
     const [modalEditM, setModalEditM] = useState(false);
 
@@ -24,7 +24,7 @@ const Cartilla = () => {
     return (
         <View style={styles.VistaPrincipal}>
             <View style={{ paddingLeft: 10, paddingTop: 10, justifyContent: 'flex-start' }}>
-                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' />
+                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('Menú')}/>
             </View>
             <View style={styles.divDatos}>
                 <View style={styles.divcard}>
@@ -103,13 +103,7 @@ const Cartilla = () => {
     );
 }
 
-export default () => {
-    return (
-        <NativeBaseProvider>
-            <Cartilla />
-        </NativeBaseProvider>
-    );
-};
+export default Cartilla;
 
 const styles = StyleSheet.create({
     VistaPrincipal: {

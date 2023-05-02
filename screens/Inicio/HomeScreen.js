@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { StyleSheet, View,Modal } from 'react-native';
 
-import { NavigationContainer } from '@react-navigation/native';
-import { Box, FormControl,Input, Image, Text, Center, Pressable, NativeBaseProvider, Spacer, Button } from "native-base";
+import { Box, FormControl,Input, Image, Text, Center, Pressable, Spacer, Button } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const HomeScreen = ({ navigation }) => {
     const [modalVisible, setModalVisible] = useState(false);
+
     return (
+        
         <View style={styles.VistaPrincipal}>
             <View style={styles.Encabe}>
                 <View>
@@ -30,7 +31,7 @@ const HomeScreen = ({ navigation }) => {
                 </View>
                 <Spacer height={1} />
                 <View style={styles.fotos}>
-                    <Pressable onPress={() => navigation.jumpTo('avisosName')}>
+                    <Pressable onPress={() => navigation.navigate('Menú')}>
                     <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="2" _web={{ shadow: 5, borderWidth: 0 }}
                         _light={{ backgroundColor: "gray.50" }}>
                         <Box>
@@ -53,7 +54,7 @@ const HomeScreen = ({ navigation }) => {
                             </Center>
                             <Center bg="#1AB28E" _text={{ color: "warmGray.50", fontWeight: "700", fontSize: "s" }}
                                 position="center" bottom="0" px="3" py="1.5">
-                                Changuito
+                                Donita
                             </Center>
                         </Box>
                     </Box>
@@ -69,7 +70,7 @@ const HomeScreen = ({ navigation }) => {
                     <Pressable style={styles.recetacard} >
                         <View style={{backgroundColor:'#1AB28E',width:'5px',height:'auto',paddingTop:2,paddingBottom:2,borderRadius:'10px'}}></View>
                         <Ionicons name="document-text" color="#1AB28E" size='32px' /> 
-                        <View style={{ flexDirection: 'column',width:'50%',height:'auto'}}>
+                        <View style={{ flexDirection: 'column',width:'auto',height:'auto'}}>
                             <Text style={{ fontWeight:'bold',fontSize:'12px', }}>Receta de Golfo</Text>
                             <Text style={{ color:'#6E6F6F',fontSize:'10px', }}>5 de Feb del 2023</Text>
                         </View>
@@ -114,21 +115,13 @@ const HomeScreen = ({ navigation }) => {
                     </View>
                 </View>
             </Modal>
-            
-
-
         </View>
+
     );
 
 }
 
-export default () => {
-    return (
-        <NativeBaseProvider>
-            <HomeScreen />
-        </NativeBaseProvider>
-    );
-};
+export default HomeScreen;
 
 const styles = StyleSheet.create({
     VistaPrincipal: {
@@ -185,7 +178,7 @@ const styles = StyleSheet.create({
         gap:4,
         display:'flex',
         backgroundColor:'#F6F6F6',
-        width:'60%',
+        width:'auto',
         height:'auto',
         maxHeight:'90px',
         borderRadius:'10px',
@@ -251,5 +244,8 @@ const styles = StyleSheet.create({
     }
     
 });
+
+
+
 
 

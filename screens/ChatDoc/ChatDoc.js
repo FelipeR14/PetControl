@@ -3,13 +3,14 @@ import { StyleSheet, View, TextInput } from 'react-native';
 import { Text, NativeBaseProvider, ScrollView, Spacer, Avatar } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const ChatDoc = () => {
+
+const ChatDoc = ({navigation}) => {
     
     const [busqueda, onChangeBusqueda] = React.useState('');
     return (
         <View style={styles.VistaPrincipal}>
             <View style={styles.divEncabe}>
-                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' />
+                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('ChatScreen')} />
                 <Avatar style={styles.avatar} source={require('../../img/vet1.jpeg')}> </Avatar>
                 <Text style={styles.textName}>Dra. Dulce Castillo </Text>
             </View> 
@@ -40,13 +41,7 @@ const ChatDoc = () => {
 
     );
 }
-export default () => {
-    return (
-        <NativeBaseProvider>
-            <ChatDoc />
-        </NativeBaseProvider>
-    );
-};
+export default ChatDoc;
 
 const styles = StyleSheet.create({
     VistaPrincipal: {

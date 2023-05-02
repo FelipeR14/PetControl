@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, NativeBaseProvider,FormControl,Button,Input,} from "native-base";
 
-const Register = () => {
+const Register = ({navigation}) => {
     const [user, onChangeUser] = React.useState('');
     const [email, onChangeEmail] = React.useState('');
     const [passw, onChangePassw] = React.useState('');
@@ -31,24 +31,18 @@ const Register = () => {
                 </FormControl>
             </View>
             <View style={styles.divBtns}>
-                <Button style={styles.btnLog} _text={{ color: "white",fontSize:'15px',fontWeight:500 }} onPress={() => ValidarRegistro()}> Save  </Button>
+                <Button style={styles.btnLog} _text={{ color: "white",fontSize:'15px',fontWeight:500 }} onPress={() => navigation.navigate('App')}> Save  </Button>
                 <View style={{flexDirection:'row',alignItems:'center',padding:5}}>
                     <Text style={{color:'#1AB28E',fontWeight:'bold'}}> or </Text>
                 </View>
-                <Button style={styles.btnReg} _text={{ color: "#1AB28E",fontSize:'15px',fontWeight:500  }} onPress={() => irLogin()}> Login  </Button>  
+                <Button style={styles.btnReg} _text={{ color: "#1AB28E",fontSize:'15px',fontWeight:500  }} onPress={() => navigation.navigate('Login')}> Login  </Button>  
             </View>
             
         </View>
     );
 }
 
-export default () => {
-    return (
-        <NativeBaseProvider>
-            <Register />
-        </NativeBaseProvider>
-    );
-};
+export default Register;
 
 const styles = StyleSheet.create({
 

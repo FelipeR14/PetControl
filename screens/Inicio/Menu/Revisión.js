@@ -3,7 +3,7 @@ import { StyleSheet, View,Modal } from 'react-native';
 import { FormControl,Input, Text, NativeBaseProvider, ScrollView, Spacer, Button } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const Revisión = () => {
+const Revisión = ({navigation}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [modalVisible2, setModalVisible2] = useState(false);
 
@@ -14,7 +14,7 @@ const Revisión = () => {
     return (
         <View style={styles.VistaPrincipal}>
             <View style={styles.divBtn}>
-                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' />
+                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('Menú')} />
                 <Ionicons name="add-circle" color="#1AB28E" size='30px' onPress={() => setModalVisible(true)} />
             </View>
             <View style={styles.divCards}>
@@ -90,13 +90,7 @@ const Revisión = () => {
         </View>
     );
 }
-export default () => {
-    return (
-        <NativeBaseProvider>
-            <Revisión />
-        </NativeBaseProvider>
-    );
-};
+export default Revisión;
 
 const styles = StyleSheet.create({
     VistaPrincipal: {

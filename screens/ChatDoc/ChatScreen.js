@@ -1,9 +1,9 @@
 import * as React from 'react';
 import { StyleSheet, View, TextInput } from 'react-native';
-import { Box, Text, NativeBaseProvider, ScrollView, Spacer, Avatar } from "native-base";
+import { Box, Text, NativeBaseProvider, ScrollView, Spacer, Avatar,Pressable } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const ChatScreen = (navigation) => {
+const ChatScreen = ({navigation}) => {
     const [busqueda, onChangeBusqueda] = React.useState('');
     return (
         <View style={styles.VistaPrincipal}>
@@ -14,9 +14,9 @@ const ChatScreen = (navigation) => {
                     <TextInput style={styles.input} onChangeText={onChangeBusqueda} value={busqueda} placeholder="Buscar" />
                 </View>
                 <Spacer height={5} />
-                <View style={styles.divchatcontainer}>
+                <Pressable style={styles.divchatcontainer} onPress={() => navigation.navigate('ChatDoc')}>
                     <View style={{ flexDirection: 'row', gap: 10 }}>
-                        <Avatar style={styles.avatar} source={require('../../img/vet1.jpeg')} onPress={() => navigation.navigate(route.avisosName)}> </Avatar>
+                        <Avatar style={styles.avatar} source={require('../../img/vet1.jpeg')} > </Avatar>
                         <View style={{ flexDirection: 'column' }}>
                             <Text style={styles.textName}>Dra. Dulce Castillo </Text>
                             <Text style={styles.textMsj}>Hola, buenas tardes. </Text>
@@ -28,7 +28,7 @@ const ChatScreen = (navigation) => {
                             <Text style={{ color: 'white', fontSize: '10px' }}> 1 </Text>
                         </Box>
                     </View>
-                </View>
+                </Pressable>
                 <Spacer height={3} />
                 <View style={styles.divchatcontainer}>
                     <View style={{ flexDirection: 'row', gap: 10 }}>
@@ -50,13 +50,7 @@ const ChatScreen = (navigation) => {
 
     );
 }
-export default () => {
-    return (
-        <NativeBaseProvider>
-            <ChatScreen />
-        </NativeBaseProvider>
-    );
-};
+export default ChatScreen;
 
 const styles = StyleSheet.create({
 

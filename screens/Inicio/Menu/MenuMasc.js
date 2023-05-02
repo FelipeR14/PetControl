@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Pressable, NativeBaseProvider, Avatar } from "native-base";
+import { Text, Pressable, Avatar } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const MenuMasc = (navigation) => {
+const MenuMasc = ({navigation}) => {
     return (
         <View style={styles.VistaPrincipal}>
             <View style={{paddingLeft:10}}>
@@ -14,19 +14,19 @@ const MenuMasc = (navigation) => {
                 <Text style={styles.datoprin}>Golfo</Text>
             </View>
             <View style={styles.divOps}>
-                <Pressable style={styles.divCard}>
+                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Baño')}>
                     <Ionicons name="paw-outline" color="#323232" size='42px' /> 
                     <Text style={styles.nomOp}>Baño</Text>
                 </Pressable>
-                <Pressable style={styles.divCard}>
+                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Revisión')}>
                     <Ionicons name="medkit-outline" color="#323232" size='42px' /> 
                     <Text style={styles.nomOp}>Revisión</Text>
                 </Pressable>
-                <Pressable style={styles.divCard}>
+                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Cartilla')}>
                     <Ionicons name="folder-outline" color="#323232" size='42px' /> 
                     <Text style={styles.nomOp}>Cartilla</Text>
                 </Pressable>
-                <Pressable style={styles.divCard}>
+                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Receta')}>
                     <Ionicons name="document-text-outline" color="#323232" size='42px' />  
                     <Text style={styles.nomOp}>Receta</Text>
                 </Pressable>
@@ -35,13 +35,8 @@ const MenuMasc = (navigation) => {
         </View>
     );
 }
-export default () => {
-    return (
-        <NativeBaseProvider>
-            <MenuMasc />
-        </NativeBaseProvider>
-    );
-};
+export default MenuMasc;
+ 
 
 const styles = StyleSheet.create({
     VistaPrincipal: {

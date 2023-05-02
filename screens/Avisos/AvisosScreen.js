@@ -31,6 +31,7 @@ const AvisosScreen = () => {
                         <Text style={{ fontWeight: 'bold', fontSize: '13px', }}>5 consejos al momento de entrenar a tu perro. </Text>
                         <Text style={{ color: '#6E6F6F', fontSize: '11px',paddingTop:4 }}>Dra Dulce Castillo</Text>
                     </Box>
+                    
                 </Pressable>
                 <Spacer height={4} />
                 <Pressable style={styles.avisocard} onPress={openLink1}>

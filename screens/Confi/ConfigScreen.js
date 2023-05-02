@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Switch, Modal } from 'react-native';
-import { Box, Image, Text, NativeBaseProvider, ScrollView, Spacer, Avatar, Button, FormControl, Input } from "native-base";
+import { StyleSheet, View, Switch, Modal, TouchableOpacity } from 'react-native';
+import { Box, Image, Text, NativeBaseProvider, ScrollView, Spacer, Avatar, Button, FormControl, Input,  } from "native-base";
+import Petcontrol from '../Login/Petcontrol';
 
-const ConfigScreen = () => {
+const ConfigScreen = ({navigation}) => {
     const [isEnabled, setIsEnabled] = useState(false);
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
     const [isEnabled2, setIsEnabled2] = useState(false);
@@ -75,7 +76,9 @@ const ConfigScreen = () => {
                         <Text style={styles.textEncabe}> SESIÓN </Text>
                     </View>
                     <View style={styles.divSecc}>
-                        <Text style={styles.textSecc}> Cerrar Sesión </Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('')}>
+                            <Text style={styles.textSecc}> Cerrar Sesión </Text>
+                        </TouchableOpacity>
                     </View>
                     <View style={styles.divSecc}>
                         <Box style={{ width: '100%', height: '3px', backgroundColor: '#E9EDEE', padding: '10' }}></Box>
@@ -119,13 +122,7 @@ const ConfigScreen = () => {
     );
 }
 
-export default () => {
-    return (
-        <NativeBaseProvider>
-            <ConfigScreen />
-        </NativeBaseProvider>
-    );
-};
+export default ConfigScreen;
 
 const styles = StyleSheet.create({
     VistaPrincipal: {
