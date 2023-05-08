@@ -50,16 +50,19 @@ const Cartilla = ({navigation}) => {
                         <Text style={styles.header}>Fecha</Text>
                         <Text style={styles.header}>Vacuna</Text>
                         <Text style={styles.header}>Lote</Text>
+                        <Text style={styles.header}>Sig.</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.cell}>Juan</Text>
-                        <Text style={styles.cell}>Pérez</Text>
-                        <Text style={styles.cell}>25</Text>
+                        <Text style={styles.cell}>07/02/22</Text>
+                        <Text style={styles.cell}>Parvovirus</Text>
+                        <Text style={styles.cell}>V13105 FEB</Text>
+                        <Text style={styles.cell}>07/07/22</Text>
                     </View>
                     <View style={styles.row}>
-                        <Text style={styles.cell}>María</Text>
-                        <Text style={styles.cell}>García</Text>
-                        <Text style={styles.cell}>30</Text>
+                        <Text style={styles.cell}>07/07/22</Text>
+                        <Text style={styles.cell}>Moquillo</Text>
+                        <Text style={styles.cell}>V14608 FEB</Text>
+                        <Text style={styles.cell}>07/12/22</Text>
                     </View>
                 </View>
 

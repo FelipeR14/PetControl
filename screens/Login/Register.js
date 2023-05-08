@@ -1,11 +1,24 @@
 import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, NativeBaseProvider,FormControl,Button,Input,} from "native-base";
+import { Text, NativeBaseProvider,FormControl,Button,Input,AlertDialog} from "native-base";
 
 const Register = ({navigation}) => {
     const [user, onChangeUser] = React.useState('');
     const [email, onChangeEmail] = React.useState('');
     const [passw, onChangePassw] = React.useState('');
+
+    const [isOpen, setIsOpen] = React.useState(false);
+    const onClose = () => setIsOpen(false);
+    const cancelRef = React.useRef(null);
+
+    const cerrarAlertDialog = () => {
+        setIsOpen(false);
+    };
+
+    const ValidarRegistro = () => {
+        cerrarAlertDialog();
+        navigation.navigate('App');
+    };
 
     return (
         <View style={styles.VistaPrincipal}>
@@ -31,15 +44,30 @@ const Register = ({navigation}) => {
                 </FormControl>
             </View>
             <View style={styles.divBtns}>
-                <Button style={styles.btnLog} _text={{ color: "white",fontSize:'15px',fontWeight:500 }} onPress={() => navigation.navigate('App')}> Save  </Button>
+                <Button style={styles.btnLog} _text={{ color: "white",fontSize:'15px',fontWeight:500 }} onPress={() => setIsOpen(!isOpen)}> Save  </Button>
                 <View style={{flexDirection:'row',alignItems:'center',padding:5}}>
                     <Text style={{color:'#1AB28E',fontWeight:'bold'}}> or </Text>
                 </View>
                 <Button style={styles.btnReg} _text={{ color: "#1AB28E",fontSize:'15px',fontWeight:500  }} onPress={() => navigation.navigate('Login')}> Login  </Button>  
             </View>
-            
+
+            <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={onClose}>
+                <AlertDialog.Content>
+                <AlertDialog.CloseButton />
+                <AlertDialog.Header>Registro finalizado</AlertDialog.Header>
+                <AlertDialog.Body>
+                    Tus datos se han guardado en nuestro sistema de manera correcta. ¡Bienvenido!
+                </AlertDialog.Body>
+                <AlertDialog.Footer>
+                    <Button colorScheme="info" onPress={ValidarRegistro}>
+                        De acuerdo
+                    </Button>
+                </AlertDialog.Footer>
+                </AlertDialog.Content>
+            </AlertDialog>
         </View>
     );
+    
 }
 
 export default Register;
