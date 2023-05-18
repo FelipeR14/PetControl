@@ -14,6 +14,8 @@ const ChatScreen = ({navigation}) => {
                     <TextInput style={styles.input} onChangeText={onChangeBusqueda} value={busqueda} placeholder="Buscar" />
                 </View>
                 <Spacer height={5} />
+                
+                
                 <Pressable style={styles.divchatcontainer} onPress={() => navigation.navigate('ChatDoc')}>
                     <View style={{ flexDirection: 'row', gap: 10 }}>
                         <Avatar style={styles.avatar} source={require('../../img/vet1.jpeg')} > </Avatar>
@@ -29,6 +31,7 @@ const ChatScreen = ({navigation}) => {
                         </Box>
                     </View>
                 </Pressable>
+                
                 <Spacer height={3} />
                 <View style={styles.divchatcontainer}>
                     <View style={{ flexDirection: 'row', gap: 10 }}>

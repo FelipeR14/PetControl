@@ -7,7 +7,7 @@ const MenuMasc = ({navigation}) => {
     return (
         <View style={styles.VistaPrincipal}>
             <View style={{paddingLeft:10}}>
-                    <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.goBack()} />
+                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.goBack()} />
             </View>
             <View style={styles.divDatos}>
                 <Avatar style={styles.avatar} source={require('../../../img/Golfo.jpg')} > </Avatar>

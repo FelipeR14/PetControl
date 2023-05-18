@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Switch, Modal, TouchableOpacity } from 'react-native';
 import { Box, Image, Text, NativeBaseProvider, ScrollView, Spacer, Avatar, Button, FormControl, Input,  } from "native-base";
-import Petcontrol from '../Login/Petcontrol';
 
 const ConfigScreen = ({navigation}) => {
     const [isEnabled, setIsEnabled] = useState(false);
@@ -23,7 +22,7 @@ const ConfigScreen = ({navigation}) => {
                 <Text style={styles.datoprin}> {name}</Text>
                 <Text style={styles.datossec}> {email} </Text>
                 <Text style={styles.datossec}> {tel} </Text>
-                <Text style={styles.datossec}> {name} </Text>
+                <Text style={styles.datossec}> {dire} </Text>
                 <Spacer height={2} />
                 <Button style={styles.btnEditPerf} onPress={() => setModalVisible(true)}> Editar perfil </Button>
             </View>

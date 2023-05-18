@@ -18,11 +18,11 @@ const Login = ({navigation}) => {
             <View style={{flexDirection:'column',paddingLeft:20,paddingTop:60,width:'90%'}}>
                 <FormControl mb="4">
                     <Text style={{fontSize:'10px',fontWeight:'500',color:'#A5A5A5'}}>Email</Text>
-                    <Input variant="underlined" style={styles.input} onChangeText={onChangeEmail} value={email} placeholder="Your email" />
+                    <Input variant="underlined" style={styles.input} onChangeText={onChangeEmail} value={email} placeholder="Your email" isRequired />
                 </FormControl>
                 <FormControl mb="4">
                     <Text style={{fontSize:'10px',fontWeight:'500',color:'#A5A5A5'}}>Password</Text>
-                    <Input variant="underlined" style={styles.input} onChangeText={onChangePassw} value={passw} placeholder="Your password" />
+                    <Input variant="underlined" style={styles.input} onChangeText={onChangePassw} value={passw} placeholder="Your password" isRequired />
                 </FormControl>
             </View>
             <View style={styles.divBtns}>

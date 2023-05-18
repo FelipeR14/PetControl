@@ -10,9 +10,9 @@ const Petcontrol = ( {navigation} ) => {
                 <Text style={{fontSize:'50px',fontWeight:'bold',color:'#1AB28E',textAlign:'center'}}> CONTROL </Text>
             </View>
             <View style={styles.divBtns}>
-                    <Button style={styles.btnLog} _text={{ color: "white",fontSize:'20px',fontWeight:500 }} onPress={() => navigation.navigate('Login')} > Login  </Button>
-                    <Spacer height={5} />
-                    <Button style={styles.btnReg} _text={{ color: "#1AB28E",fontSize:'20px',fontWeight:500  }} onPress={() => navigation.navigate("Register")}> Register  </Button>  
+                <Button style={styles.btnLog} _text={{ color: "white",fontSize:'20px',fontWeight:500 }} onPress={() => navigation.navigate('Login')} > Login  </Button>
+                <Spacer height={5} />
+                <Button style={styles.btnReg} _text={{ color: "#1AB28E",fontSize:'20px',fontWeight:500  }} onPress={() => navigation.navigate("Register")}> Register  </Button>  
             </View>
         </View> 
     )

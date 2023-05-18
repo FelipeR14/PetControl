@@ -11,6 +11,10 @@ const Register = ({navigation}) => {
     const onClose = () => setIsOpen(false);
     const cancelRef = React.useRef(null);
 
+    const [isOpen2, setIsOpen2] = React.useState(false);
+    const onClose2 = () => setIsOpen2(false);
+    const cancelRef2 = React.useRef(null);
+
     const cerrarAlertDialog = () => {
         setIsOpen(false);
     };
@@ -18,6 +22,10 @@ const Register = ({navigation}) => {
     const ValidarRegistro = () => {
         cerrarAlertDialog();
         navigation.navigate('App');
+    };
+
+    const Validado = () => {
+        setIsOpen(true);
     };
 
     return (
@@ -60,6 +68,24 @@ const Register = ({navigation}) => {
                 </AlertDialog.Body>
                 <AlertDialog.Footer>
                     <Button colorScheme="info" onPress={ValidarRegistro}>
+                        De acuerdo
+                    </Button>
+                </AlertDialog.Footer>
+                </AlertDialog.Content>
+            </AlertDialog>
+            
+            <AlertDialog leastDestructiveRef={cancelRef2} isOpen={isOpen2} onClose={onClose2}>
+                <AlertDialog.Content>
+                <AlertDialog.CloseButton />
+                <AlertDialog.Header>¿Estás seguro de usar estos datos?</AlertDialog.Header>
+                <AlertDialog.Body>
+                    ¿Estás seguro de usar estos datos?
+                </AlertDialog.Body>
+                <AlertDialog.Footer>
+                    <Button colorScheme="warning" onClose={onClose2}>
+                        Cancelar
+                    </Button>
+                    <Button colorScheme="info" onPress={Validado}>
                         De acuerdo
                     </Button>
                 </AlertDialog.Footer>

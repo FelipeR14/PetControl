@@ -5,7 +5,7 @@ import { Box, FormControl,Input, Image, Text, Center, Pressable, Spacer, Button 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const HomeScreen = ({ navigation }) => {
-    const [modalVisible, setModalVisible] = useState(false);
+    const [agregarMasc, setAgregarMasc] = useState(false);
 
     return (
         
@@ -25,26 +25,29 @@ const HomeScreen = ({ navigation }) => {
                         <Text style={styles.textSeccion}> Tus mascotas</Text>
                     </View>
                     <Box style={styles.IconoPlus}>
-                        <Ionicons name="add-circle" color="#1AB28E" size='25px' onPress={() => setModalVisible(true)} />
-                    </Box>
-                    
+                        <Ionicons name="add-circle" color="#1AB28E" size='25px' onPress={() => setAgregarMasc(true)} />
+                    </Box>                    
                 </View>
                 <Spacer height={1} />
                 <View style={styles.fotos}>
-                    <Pressable onPress={() => navigation.navigate('Menú')}>
-                    <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="2" _web={{ shadow: 5, borderWidth: 0 }}
-                        _light={{ backgroundColor: "gray.50" }}>
-                        <Box>
-                            <Center>
-                                <Image source={require('../../img/Golfo.jpg')} width={110} height={100} alt="Mascota 1"/>
-                            </Center>
-                            <Center bg="#1AB28E" _text={{ color: "warmGray.50", fontWeight: "700", fontSize: "s" }}
-                                position="center" bottom="0" px="3" py="1.5">
-                                Golfo
-                            </Center>
+                    
+                    
+                    <Pressable onPress={() => navigation.navigate('Menú')}> 
+                    
+                        <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="2" _web={{ shadow: 5, borderWidth: 0 }}
+                            _light={{ backgroundColor: "gray.50" }}>
+                            <Box> 
+                                <Center>
+                                    <Image source={require('../../img/Golfo.jpg')} width={110} height={100} alt="Mascota 1"/> 
+                                </Center>
+                                <Center bg="#1AB28E" _text={{ color: "warmGray.50", fontWeight: "700", fontSize: "s" }}
+                                    position="center" bottom="0" px="3" py="1.5">
+                                    Golfo
+                                </Center>
+                            </Box>
                         </Box>
-                    </Box>
                     </Pressable>
+                    
 
                     <Box maxW="80" rounded="lg" overflow="hidden" borderColor="coolGray.200" borderWidth="2" _web={{ shadow: 5, borderWidth: 0 }}
                         _light={{ backgroundColor: "gray.50" }}>
@@ -109,8 +112,8 @@ const HomeScreen = ({ navigation }) => {
                             <Input variant="underlined"  w={'90%'}/>
                         </FormControl>
                         <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'space-around' }}>
-                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalVisible(!modalVisible)}> Guardar  </Button>
-                            <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setModalVisible(!modalVisible)}> Cancelar  </Button>
+                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setAgregarMasc(!agregarMasc)}> Guardar  </Button>
+                            <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setAgregarMasc(!agregarMasc)}> Cancelar  </Button>
                         </View>
                     </View>
                 </View>
@@ -159,6 +162,8 @@ const styles = StyleSheet.create({
     },
     fotos: {
         flexDirection: 'row',
+        display:'flex',
+        flexWrap:'wrap',
         gap: 20,
         padding: 10,
         shadow: 5, 
@@ -170,6 +175,8 @@ const styles = StyleSheet.create({
     cardsrecetas:{
         padding:10,
         flexDirection:'row',
+        display:'flex',
+        flexWrap:'wrap',
         gap:15,
     },
     recetacard:{

@@ -10,10 +10,7 @@ const Stack = createNativeStackNavigator();
 
 const AuthStack = () => {
     return (
-        <Stack.Navigator
-            initialRouteName="Petcontrol"
-            screenOptions={{ headerShown: false }}
-        >
+        <Stack.Navigator initialRouteName="Petcontrol" screenOptions={{ headerShown: false }} >
             <Stack.Screen
                 name={"Petcontrol"}
                 component={Petcontrol}
@@ -33,8 +30,6 @@ const AuthStack = () => {
                 name={"App"}
                 component={Appchido}
             />
-
-
         </Stack.Navigator>
     );
 }

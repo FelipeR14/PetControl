@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const ChatDoc = ({navigation}) => {
     
-    const [busqueda, onChangeBusqueda] = React.useState('');
+    const [msj, onChangeMsj] = React.useState('');
     return (
         <View style={styles.VistaPrincipal}>
             <View style={styles.divEncabe}>
@@ -32,7 +32,7 @@ const ChatDoc = ({navigation}) => {
             </View>
             <View style={styles.divinput}>
                 <View style={styles.elementosinput}>
-                    <TextInput style={styles.input} onChangeText={onChangeBusqueda} value={busqueda} placeholder="Mensaje" />
+                    <TextInput style={styles.input} onChangeText={onChangeMsj} value={msj} placeholder="Mensaje" />
                     <Ionicons name="send-sharp" color="#1AB28E" size='20px' />
                 </View>
             </View>

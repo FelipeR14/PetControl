@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'; 
 import { StyleSheet, View,Modal } from 'react-native';
 import { FormControl,Input, Text, NativeBaseProvider, ScrollView, Spacer, Button } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const Revisión = ({navigation}) => {
-    const [modalVisible, setModalVisible] = useState(false);
-    const [modalVisible2, setModalVisible2] = useState(false);
+    const [modalrevision, setModalRevision] = useState(false);
+    const [modaledit, setModalEdit] = useState(false);
 
     const [descrip, onChangeDescrip] = React.useState('Revisión de herida');
     const [fecha, onChangeFecha] = React.useState('05/02/23');
@@ -15,7 +15,7 @@ const Revisión = ({navigation}) => {
         <View style={styles.VistaPrincipal}>
             <View style={styles.divBtn}>
                 <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('Menú')} />
-                <Ionicons name="add-circle" color="#1AB28E" size='30px' onPress={() => setModalVisible(true)} />
+                <Ionicons name="add-circle" color="#1AB28E" size='30px' onPress={() => setModalRevision(true)} />
             </View>
             <View style={styles.divCards}>
                 <View style={styles.cardbaño}>
@@ -29,7 +29,7 @@ const Revisión = ({navigation}) => {
                         </View>
                     </View>
                     <View style={{flexDirection:'column',alignContent:'center',paddingRight:5,}}>
-                        <Ionicons name="create-outline" size='25px' onPress={() => setModalVisible2(true)} />
+                        <Ionicons name="create-outline" size='25px' onPress={() => setModalEdit(true)} />
                         <Spacer height={1} />
                         <Ionicons name="close-circle" color="#B20A0A" size='25px' />                        
                     </View>
@@ -38,7 +38,7 @@ const Revisión = ({navigation}) => {
             <Modal
                 animationType="slide"
                 transparent={true}
-                visible={modalVisible}>
+                visible={modalrevision}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.tituloModal}>Agregando datos</Text>
@@ -55,8 +55,8 @@ const Revisión = ({navigation}) => {
                             <Input variant="underlined" w={'90%'}/>
                         </FormControl>
                         <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'space-around' }}>
-                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalVisible(!modalVisible)}> Guardar  </Button>
-                            <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setModalVisible(!modalVisible)}> Cancelar  </Button>
+                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalRevision(!modalrevision)}> Guardar  </Button>
+                            <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setModalRevision(!modalrevision)}> Cancelar  </Button>
                         </View>
                     </View>
                 </View>
@@ -64,7 +64,7 @@ const Revisión = ({navigation}) => {
             <Modal 
                 animationType="slide"
                 transparent={true}
-                visible={modalVisible2}>
+                visible={modaledit}>
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.tituloModal}>Editando datos</Text>
@@ -81,8 +81,8 @@ const Revisión = ({navigation}) => {
                             <Input variant="underlined" w={'90%'} onChangeText={onChangeProxf} value={proxf}/>
                         </FormControl>
                         <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'space-around' }}>
-                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalVisible2(!modalVisible2)}> Guardar  </Button>
-                            <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setModalVisible2(!modalVisible2)}> Cancelar  </Button>
+                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalEdit(!modaledit)}> Guardar  </Button>
+                            <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setModalEdit(!modaledit)}> Cancelar  </Button>
                         </View>
                     </View>
                 </View>

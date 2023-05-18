@@ -7,7 +7,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AvisosScreen from '../Avisos/AvisosScreen';
 import MapScreen from '../Mapa/MapScreen';
 import HomeScreen from '../Inicio/HomeScreen';
-import ConfigScreen from '..//Confi/ConfigScreen';
+import ConfigScreen from '../Confi/ConfigScreen';
 
 import MenuMasc from '../Inicio/Menu/MenuMasc';
 import Baño from '../Inicio/Menu/Baño';
