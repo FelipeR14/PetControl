@@ -7,6 +7,7 @@ const MapScreen = () => {
     return (
         <View style={styles.VistaPrincipal}>
             <Text> Map screen </Text>
+            
 
         </View>
 

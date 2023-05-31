@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Switch, Modal } from 'react-native';
-import { Image, Text, NativeBaseProvider, ScrollView, Avatar, Button, FormControl, Input } from "native-base";
+import { StyleSheet, View, Switch, Modal,FlatList } from 'react-native';
+import { Image, Text, ScrollView, Avatar, Button, FormControl, Input } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import { Table, Row } from 'react-native-table-component';
+import { Table, Row, Rows } from 'react-native-table-component';
 
 
 const Cartilla = ({navigation}) => {
@@ -14,12 +14,25 @@ const Cartilla = ({navigation}) => {
     const [sex, onChangeSex] = React.useState('Macho');
     const [raza, onChangeRaza] = React.useState('Schnauzer');
     const [peso, onChangePeso] = React.useState('12.5kg');
+    
+    const [showTable1, setShowTable1] = useState(true);
 
-    const tableHead = ['Nombre', 'Apellido', 'Edad'];
-    const tableData = [['Juan', 'Pérez', '25'],
-    ['María', 'García', '30'],
-    ['Pedro', 'González', '28'],
+    const table1Head = ['Fecha','Vacuna','Lote','Sig.'];
+    const table1 = [
+        ['07/02/22', 'Parvovirus', 'V13105 FEB','07/07/22'],
+        ['07/02/22', 'Parvovirus', 'V13105 FEB','07/07/22'],
     ];
+
+    const table2Head = ['Fecha','Desparasit','Peso','Sig.'];
+    const table2 = [
+        ['07/02/22', 'Despa100', '11 kg','07/07/22'],
+        ['07/02/22', 'Despa100', '11 kg','07/07/22'],
+    ];
+    
+
+    const toggleTables = () => {
+        setShowTable1(!showTable1);
+      };
 
     return (
         <View style={styles.VistaPrincipal}>
@@ -30,7 +43,7 @@ const Cartilla = ({navigation}) => {
                 <View style={styles.divcard}>
                     <View style={{ alignItems: 'flex-end' }} > <Ionicons name="create-outline" color="#1AB28E" size='20px' onPress={() => setModalEditM(true)} /> </View>
                     <View style={{ alignItems: 'center', padding: 5 }}>
-                        <Avatar style={styles.avatar} source={require('../../../img/Golfo.jpg')} > </Avatar>
+                        <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/mascpic.jpg?alt=media&token=5b405f7e-99eb-43ee-add7-64c0b6e85826"}} > </Avatar>
                         <Text style={styles.tituloM}> {namem}</Text>
                         <Text style={styles.datosMasc}>Especie: {especie}</Text>
                         <Text style={styles.datosMasc}>Sexo: {sex}</Text>
@@ -41,31 +54,23 @@ const Cartilla = ({navigation}) => {
                 </View>
             </View>
             <View style={styles.divBtns}>
-                <Button style={styles.btnV} _text={{ color: "white" }} onPress={() => mostrarVac()}> Vacunación  </Button>
-                <Button style={styles.btnP} _text={{ color: "#1AB28E" }} onPress={() => mostrarDesp()}> Desparacitación  </Button>
+                <Button style={styles.btnV} _text={{ color: "white" }} onPress={toggleTables} > Vacunación  </Button>
+                <Button style={styles.btnP} _text={{ color: "#1AB28E" }} onPress={toggleTables}> Desparacitación  </Button>
             </View>
             <View style={styles.divTabla}>
                 <View style={styles.table}>
-                    <View style={styles.row}>
-                        <Text style={styles.header}>Fecha</Text>
-                        <Text style={styles.header}>Vacuna</Text>
-                        <Text style={styles.header}>Lote</Text>
-                        <Text style={styles.header}>Sig.</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.cell}>07/02/22</Text>
-                        <Text style={styles.cell}>Parvovirus</Text>
-                        <Text style={styles.cell}>V13105 FEB</Text>
-                        <Text style={styles.cell}>07/07/22</Text>
-                    </View>
-                    <View style={styles.row}>
-                        <Text style={styles.cell}>07/07/22</Text>
-                        <Text style={styles.cell}>Moquillo</Text>
-                        <Text style={styles.cell}>V14608 FEB</Text>
-                        <Text style={styles.cell}>07/12/22</Text>
-                    </View>
+                    {showTable1 ? (
+                        <Table>
+                            <Row style={styles.header} textStyle={{color:'white'}} data={table1Head} />
+                            <Rows style={styles.cell} textStyle={{fontSize:'11px'}} data={table1} />
+                        </Table>                        
+                    ) : (
+                        <Table>
+                            <Row style={styles.header} textStyle={{color:'white'}} data={table2Head} />
+                            <Rows style={styles.cell} textStyle={{fontSize:'11px'}} data={table2} />
+                        </Table> 
+                    )}
                 </View>
-
             </View>
             <Modal
                 animationType="slide"
@@ -74,7 +79,7 @@ const Cartilla = ({navigation}) => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.tituloModal}>Editando datos</Text>
-                        <Image style={styles.fotoperfil} source={require('../../../img/Golfo.jpg')} />
+                        <Image style={styles.fotoperfil} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/mascpic.jpg?alt=media&token=5b405f7e-99eb-43ee-add7-64c0b6e85826"}} />
                         <FormControl mb="2" mt="5">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Nombre</Text>
                             <Input variant="underlined" w={'90%'} value={namem} />

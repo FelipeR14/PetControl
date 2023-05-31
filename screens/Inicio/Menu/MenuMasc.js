@@ -10,7 +10,7 @@ const MenuMasc = ({navigation}) => {
                 <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.goBack()} />
             </View>
             <View style={styles.divDatos}>
-                <Avatar style={styles.avatar} source={require('../../../img/Golfo.jpg')} > </Avatar>
+                <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/mascpic.jpg?alt=media&token=5b405f7e-99eb-43ee-add7-64c0b6e85826"}} > </Avatar>
                 <Text style={styles.datoprin}>Golfo</Text>
             </View>
             <View style={styles.divOps}>

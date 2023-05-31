@@ -67,7 +67,7 @@ export default function Tabnav() {
               iconName = focused ? 'settings' : 'settings-outline';
             }
 
-            return <Ionicons name={iconName} size={'20px'} color={color} />;
+            return <Ionicons name={iconName} size={20} color={color} />;
 
           },
           headerShown: false,

@@ -1,6 +1,12 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Switch, Modal, TouchableOpacity } from 'react-native';
 import { Box, Image, Text, NativeBaseProvider, ScrollView, Spacer, Avatar, Button, FormControl, Input,  } from "native-base";
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from '../../configfb';
+import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+
+import {getDatabase, ref,set} from 'firebase/database';
+
 
 const ConfigScreen = ({navigation}) => {
     const [isEnabled, setIsEnabled] = useState(false);
@@ -14,10 +20,13 @@ const ConfigScreen = ({navigation}) => {
     const [tel, onChangeTel] = React.useState('449 265 3531');
     const [dire, onChangeDire] = React.useState('Pozo Alto #121, Pozo Bravo Norte');
 
+           
+
+        
     return (
         <View style={styles.VistaPrincipal}>
             <View style={styles.divPerfil}>
-                <Avatar style={styles.avatar} source={require('../../img/foto.jpg')} > </Avatar>
+                <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/userpic.jpg?alt=media&token=a219975f-db64-416a-aecd-cd93f7f387a6"}} > </Avatar>
                 <Spacer height={2} />
                 <Text style={styles.datoprin}> {name}</Text>
                 <Text style={styles.datossec}> {email} </Text>
@@ -91,7 +100,7 @@ const ConfigScreen = ({navigation}) => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.tituloModal}>Editando datos</Text>
-                        <Image style={styles.fotoperfil} source={require('../../img/foto.jpg')} />
+                        <Image style={styles.fotoperfil} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/userpic.jpg?alt=media&token=a219975f-db64-416a-aecd-cd93f7f387a6"}} />
                         <FormControl mb="2" mt="5">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Nombre</Text>
                             <Input variant="underlined"  w={'90%'} onChangeText={onChangeName} value={name}/>

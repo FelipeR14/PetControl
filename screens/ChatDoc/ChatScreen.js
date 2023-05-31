@@ -18,7 +18,7 @@ const ChatScreen = ({navigation}) => {
                 
                 <Pressable style={styles.divchatcontainer} onPress={() => navigation.navigate('ChatDoc')}>
                     <View style={{ flexDirection: 'row', gap: 10 }}>
-                        <Avatar style={styles.avatar} source={require('../../img/vet1.jpeg')} > </Avatar>
+                        <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/vet1.jpeg?alt=media&token=4fc8a680-1ec3-48ee-b440-9d194457c496"}} > </Avatar>
                         <View style={{ flexDirection: 'column' }}>
                             <Text style={styles.textName}>Dra. Dulce Castillo </Text>
                             <Text style={styles.textMsj}>Hola, buenas tardes. </Text>
@@ -35,7 +35,7 @@ const ChatScreen = ({navigation}) => {
                 <Spacer height={3} />
                 <View style={styles.divchatcontainer}>
                     <View style={{ flexDirection: 'row', gap: 10 }}>
-                        <Avatar style={styles.avatar} source={require('../../img/vet3.jpg')}> </Avatar>
+                        <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/vet2.jfif?alt=media&token=ddf2ee12-61e3-4ad2-a676-a04552afc9cd"}}> </Avatar>
                         <View style={{ flexDirection: 'column' }}>
                             <Text style={styles.textName}>Dr. Michi </Text>
                             <Text style={styles.textMsj}>Le dejo las indicaciones. </Text>

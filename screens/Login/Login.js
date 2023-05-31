@@ -1,10 +1,31 @@
 import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View,Alert} from 'react-native';
 import { Text, NativeBaseProvider,FormControl,Button,Input,} from "native-base";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from '../../configfb';
 
 const Login = ({navigation}) => {
-    const [email, onChangeEmail] = React.useState('');
-    const [passw, onChangePassw] = React.useState('');
+    const [email, setEmail] = React.useState('');
+    const [passw, setPassw] = React.useState('');
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+
+    const handleSigIn = () => {
+        signInWithEmailAndPassword(auth,email,passw)
+        .then((userCredential) => {
+            console.log('Sesión iniciada')
+            const user = userCredential.user;
+            console.log(user)
+            navigation.navigate('App');
+        })
+        .catch((error) => {
+            console.log("Error:" + error);
+            alert("Error:" + error);
+            Alert.alert(error)
+          });
+    }
 
     return (
         <View style={styles.VistaPrincipal}>
@@ -16,17 +37,17 @@ const Login = ({navigation}) => {
                 </View>
             </View>
             <View style={{flexDirection:'column',paddingLeft:20,paddingTop:60,width:'90%'}}>
-                <FormControl mb="4">
+                <FormControl mb="4" isRequired>
                     <Text style={{fontSize:'10px',fontWeight:'500',color:'#A5A5A5'}}>Email</Text>
-                    <Input variant="underlined" style={styles.input} onChangeText={onChangeEmail} value={email} placeholder="Your email" isRequired />
+                    <Input variant="underlined" style={styles.input} onChangeText={(text) => setEmail(text)} placeholder="Your email" isRequired />
                 </FormControl>
-                <FormControl mb="4">
+                <FormControl mb="4" isRequired>
                     <Text style={{fontSize:'10px',fontWeight:'500',color:'#A5A5A5'}}>Password</Text>
-                    <Input variant="underlined" style={styles.input} onChangeText={onChangePassw} value={passw} placeholder="Your password" isRequired />
+                    <Input type='password' variant="underlined" style={styles.input} onChangeText={(text) => setPassw(text)} placeholder="Your password" isRequired />
                 </FormControl>
             </View>
             <View style={styles.divBtns}>
-                <Button style={styles.btnLog} _text={{ color: "white",fontSize:'15px',fontWeight:500 }} onPress={() => navigation.navigate('App')}> Login  </Button>
+                <Button style={styles.btnLog} _text={{ color: "white",fontSize:'15px',fontWeight:500 }} onPress={handleSigIn}> Login  </Button>
                 <View style={{flexDirection:'row',alignItems:'center',padding:5}}>
                     <Text style={{color:'#1AB28E',fontWeight:'bold'}}> or </Text>
                 </View>
