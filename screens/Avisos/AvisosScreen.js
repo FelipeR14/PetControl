@@ -15,7 +15,7 @@ const AvisosScreen = () => {
             <View style={styles.divAvisos}>
                 <Pressable style={styles.avisocard} onPress={openLink2}>
                     <Box>
-                        <Image source={{uri: "https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/logoTw.png?alt=media&token=b8a2682d-9863-4d06-8fce-b59b30973788"}} width={'40px'} height={'40px'} />
+                        <Image source={{uri: "https://firebasestorage.googleapis.com/v0/b/proyectopc-ed74f.appspot.com/o/logoTw.png?alt=media&token=58678d51-b19f-4e01-997a-0f1928fdac17"}} width={'40px'} height={'40px'} />
                     </Box>
                     <Box style={{ flexDirection: 'column',width:'80%',height:'auto' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: '13px', }}>¿Qué debo hacer si mi perro sufre un episodio de epilepsia? </Text>
@@ -25,7 +25,7 @@ const AvisosScreen = () => {
                 <Spacer height={4} />
                 <Pressable style={styles.avisocard} onPress={openLink1}> 
                     <Box>
-                        <Image source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/logoTw.png?alt=media&token=b8a2682d-9863-4d06-8fce-b59b30973788"}} width={'40px'} height={'40px'} />
+                        <Image source={{uri:"https://firebasestorage.googleapis.com/v0/b/proyectopc-ed74f.appspot.com/o/logoTw.png?alt=media&token=58678d51-b19f-4e01-997a-0f1928fdac17"}} width={'40px'} height={'40px'} />
                     </Box>
                     <Box style={{ flexDirection: 'column',width:'80%',height:'auto'  }}>
                         <Text style={{ fontWeight: 'bold', fontSize: '13px', }}>5 consejos al momento de entrenar a tu perro. </Text>
@@ -36,7 +36,7 @@ const AvisosScreen = () => {
                 <Spacer height={4} />
                 <Pressable style={styles.avisocard} onPress={openLink1}>
                     <Box>
-                        <Image source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/logoFb.png?alt=media&token=cbc7b70f-9b5f-42a6-a005-c4b6adaef103"}} width={'40px'} height={'40px'} />
+                        <Image source={{uri:"https://firebasestorage.googleapis.com/v0/b/proyectopc-ed74f.appspot.com/o/logoFb.png?alt=media&token=a1ad0437-38df-453f-88b6-5d155a11f7a0"}} width={'40px'} height={'40px'} />
                     </Box>
                     <Box style={{ flexDirection: 'column', width:'80%',height:'auto' }}>
                         <Text style={{ fontWeight: 'bold', fontSize: '13px', }}>Nueva jornada de esterilización. </Text>

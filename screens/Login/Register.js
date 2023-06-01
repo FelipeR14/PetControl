@@ -4,7 +4,7 @@ import { Text, FormControl, Button, Input, AlertDialog } from "native-base";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../../configfb';
-import {getDatabase, ref,set} from 'firebase/database';
+import { getFirestore, collection, doc, setDoc } from "firebase/firestore";
 
 const Register = ({ navigation }) => {
 
@@ -18,7 +18,19 @@ const Register = ({ navigation }) => {
 
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getDatabase(app);
+    const db = getFirestore(app);
+
+    const saveUser = async (user) => {
+        const data = {
+            img: "https://firebasestorage.googleapis.com/v0/b/proyectopc-ed74f.appspot.com/o/userpic.jpg?alt=media&token=758620bf-a028-4e83-874a-4da997a0f100",
+            name: username,
+            email: email,
+            pass: passw,
+            tel: "",
+            direccion: ""
+        }    
+        await setDoc(doc(db, "users", user), data);    
+      }
 
     const handleCreateAccount = () => {
         createUserWithEmailAndPassword(auth, email, passw)
@@ -27,20 +39,9 @@ const Register = ({ navigation }) => {
                 console.log('Cuenta creada')
                 const user = userCredential.user;
                 console.log(user)
-                    //se agrega a una bd
-                    set(ref(db, 'users/' + user.uid), {
-                        img: "https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/userpic.jpg?alt=media&token=a219975f-db64-416a-aecd-cd93f7f387a6",
-                        name: username,
-                        email: email,
-                        pass: passw,
-                        tel: "",
-                        direccion: ""
-                    }).then(() => {
-                        console.log("Datos cargados");
-                    }).catch((error) => {
-                        console.log("Error:" + error);
-                        alert("Error:" + error);
-                    });                
+
+                saveUser(user.uid)
+                    
             })
             .catch((error) => {
                 console.log("Error:" + error);
@@ -52,8 +53,6 @@ const Register = ({ navigation }) => {
         setIsOpen(false);
         navigation.navigate('App');
     };
-
-
 
 
     return (

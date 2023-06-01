@@ -13,12 +13,15 @@ const Login = ({navigation}) => {
     const auth = getAuth(app);
 
     const handleSigIn = () => {
+
+        navigation.navigate('App'); // Quitar esto en producción
+
         signInWithEmailAndPassword(auth,email,passw)
         .then((userCredential) => {
             console.log('Sesión iniciada')
             const user = userCredential.user;
             console.log(user)
-            navigation.navigate('App');
+            // navigation.navigate('App');
         })
         .catch((error) => {
             console.log("Error:" + error);

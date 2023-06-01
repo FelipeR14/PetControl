@@ -11,7 +11,7 @@ const ChatDoc = ({navigation}) => {
         <View style={styles.VistaPrincipal}>
             <View style={styles.divEncabe}>
                 <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('ChatScreen')} />
-                <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/vet1.jpeg?alt=media&token=4fc8a680-1ec3-48ee-b440-9d194457c496"}}> </Avatar>
+                <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/proyectopc-ed74f.appspot.com/o/vet1.jpeg?alt=media&token=39624eb8-e6d3-4d84-96ef-1bd9f3ec5998"}}> </Avatar>
                 <Text style={styles.textName}>Dra. Dulce Castillo </Text>
             </View> 
             <Spacer height={2} />
