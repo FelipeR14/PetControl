@@ -1,54 +1,102 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Switch, Modal,FlatList } from 'react-native';
+import React, { useState,useEffect } from 'react';
+import { StyleSheet, View, Modal,  } from 'react-native';
 import { Image, Text, ScrollView, Avatar, Button, FormControl, Input } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { Table, Row, Rows } from 'react-native-table-component';
+import { useRoute } from '@react-navigation/native';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from '../../../configfb';
+import { getFirestore,doc,onSnapshot,updateDoc } from "firebase/firestore";
 
 
-const Cartilla = ({navigation}) => {
+const Cartilla = ({ navigation }) => {
+    const route = useRoute();
+    const { mascota } = route.params;
+ 
+    const app = initializeApp(firebaseConfig);
+    
+    const db = getFirestore(app);
 
+    //up
     const [modalEditM, setModalEditM] = useState(false);
 
-    const [namem, onChangeNamem] = React.useState('Golfo');
-    const [especie, onChangeEspecie] = React.useState('Perro');
-    const [sex, onChangeSex] = React.useState('Macho');
-    const [raza, onChangeRaza] = React.useState('Schnauzer');
-    const [peso, onChangePeso] = React.useState('12.5kg');
-    
+    const [namem, setNamem] =  useState('');
+    const [especie, setEspecie] =  useState('');
+    const [sex, setSex] =  useState('');
+    const [raza, setRaza] =  useState('');
+    const [peso, setPeso] =  useState('');
+
+    const [namemEdit, setNamemEdit] =  useState('');
+    const [especieEdit, setEspecieEdit] =  useState('');
+    const [sexEdit, setSexEdit] =  useState('');
+    const [razaEdit, setRazaEdit] =  useState('');
+    const [pesoEdit, setPesoEdit] =  useState('');
+
+    useEffect(() => {
+            onSnapshot(doc(db, 'mascotas', mascota.id), doc => {
+                if (doc.data() !== undefined) {
+                    setNamem(doc.data().nombremasc)
+                    setEspecie(doc.data().especie)
+                    setSex(doc.data().sexo)
+                    setRaza(doc.data().raza)
+                    setPeso(doc.data().peso)
+
+                    setNamemEdit(doc.data().nombremasc)
+                    setEspecieEdit(doc.data().especie)
+                    setSexEdit(doc.data().sexo)
+                    setRazaEdit(doc.data().raza)
+                    setPesoEdit(doc.data().peso)
+                }
+            });
+        
+    }, []);
+    const upMascotaData = async () => {
+        
+        const data = {
+            nombremasc: namemEdit,
+            especie: especieEdit,
+            sexo: sexEdit,
+            raza: razaEdit,
+            peso: pesoEdit,
+        }
+        await updateDoc(doc(db, "mascotas",mascota.id), data);
+        setModalEditM(!modalEditM)
+    }
+
     const [showTable1, setShowTable1] = useState(true);
 
-    const table1Head = ['Fecha','Vacuna','Lote','Sig.'];
+    const table1Head = ['Fecha', 'Vacuna', 'Lote', 'Sig.'];
     const table1 = [
-        ['07/02/22', 'Parvovirus', 'V13105 FEB','07/07/22'],
-        ['07/02/22', 'Parvovirus', 'V13105 FEB','07/07/22'],
+        ['07/02/22', 'Parvovirus', 'V13105 FEB', '07/07/22'],
+        ['07/02/22', 'Parvovirus', 'V13105 FEB', '07/07/22'],
     ];
 
-    const table2Head = ['Fecha','Desparasit','Peso','Sig.'];
+    const table2Head = ['Fecha', 'Desparasit', 'Peso', 'Sig.'];
     const table2 = [
-        ['07/02/22', 'Despa100', '11 kg','07/07/22'],
-        ['07/02/22', 'Despa100', '11 kg','07/07/22'],
+        ['07/02/22', 'Despa100', '11 kg', '07/07/22'],
+        ['07/02/22', 'Despa100', '11 kg', '07/07/22'],
     ];
-    
+
 
     const toggleTables = () => {
         setShowTable1(!showTable1);
-      };
+    };
 
     return (
         <View style={styles.VistaPrincipal}>
             <View style={{ paddingLeft: 10, paddingTop: 10, justifyContent: 'flex-start' }}>
-                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('Menú')}/>
+                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('Menú', { mascota: mascota })} key={mascota.id} />
             </View>
             <View style={styles.divDatos}>
                 <View style={styles.divcard}>
-                    <View style={{ alignItems: 'flex-end' }} > <Ionicons name="create-outline" color="#1AB28E" size='20px' onPress={() => setModalEditM(true)} /> </View>
+                    <View style={{ alignItems: 'flex-end' }} > <Ionicons name="create-outline" color="#1AB28E" size='20px' onPress={() => setModalEditM(true)}/> </View>
                     <View style={{ alignItems: 'center', padding: 5 }}>
-                        <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/mascpic.jpg?alt=media&token=5b405f7e-99eb-43ee-add7-64c0b6e85826"}} > </Avatar>
-                        <Text style={styles.tituloM}> {namem}</Text>
+                        <Avatar style={styles.avatar} source={{ uri: "https://firebasestorage.googleapis.com/v0/b/proyectopc-ed74f.appspot.com/o/mascpic.jpg?alt=media&token=0b07449e-215e-4e1d-a6f5-4cea516670b6" }} > </Avatar>
+                        <Text style={styles.tituloM}> {namem} </Text>
                         <Text style={styles.datosMasc}>Especie: {especie}</Text>
-                        <Text style={styles.datosMasc}>Sexo: {sex}</Text>
-                        <Text style={styles.datosMasc}>Raza {raza}</Text>
-                        <Text style={styles.datosMasc}>Peso {peso}</Text>
+                        <Text style={styles.datosMasc}>Sexo: {sex} </Text>
+                        <Text style={styles.datosMasc}>Raza: {raza} </Text>
+                        <Text style={styles.datosMasc}>Peso: {peso} </Text>
                     </View>
 
                 </View>
@@ -61,14 +109,14 @@ const Cartilla = ({navigation}) => {
                 <View style={styles.table}>
                     {showTable1 ? (
                         <Table>
-                            <Row style={styles.header} textStyle={{color:'white'}} data={table1Head} />
-                            <Rows style={styles.cell} textStyle={{fontSize:'11px'}} data={table1} />
-                        </Table>                        
+                            <Row style={styles.header} textStyle={{ color: 'white' }} data={table1Head} />
+                            <Rows style={styles.cell} textStyle={{ fontSize: '11px' }} data={table1} />
+                        </Table>
                     ) : (
                         <Table>
-                            <Row style={styles.header} textStyle={{color:'white'}} data={table2Head} />
-                            <Rows style={styles.cell} textStyle={{fontSize:'11px'}} data={table2} />
-                        </Table> 
+                            <Row style={styles.header} textStyle={{ color: 'white' }} data={table2Head} />
+                            <Rows style={styles.cell} textStyle={{ fontSize: '11px' }} data={table2} />
+                        </Table>
                     )}
                 </View>
             </View>
@@ -79,29 +127,29 @@ const Cartilla = ({navigation}) => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.tituloModal}>Editando datos</Text>
-                        <Image style={styles.fotoperfil} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/mascpic.jpg?alt=media&token=5b405f7e-99eb-43ee-add7-64c0b6e85826"}} />
+                        
                         <FormControl mb="2" mt="5">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Nombre</Text>
-                            <Input variant="underlined" w={'90%'} value={namem} />
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setNamemEdit(text)} value={namemEdit} />
                         </FormControl>
                         <FormControl mb="2">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Especie</Text>
-                            <Input variant="underlined" w={'90%'} value={especie} />
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setEspecieEdit(text)} value={especieEdit} />
                         </FormControl>
                         <FormControl mb="2">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Sexo</Text>
-                            <Input variant="underlined" w={'90%'} value={sex} />
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setSexEdit(text)} value={sexEdit} />
                         </FormControl>
                         <FormControl mb="2">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Raza</Text>
-                            <Input variant="underlined" w={'90%'} value={raza} />
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setRazaEdit(text)} value={razaEdit}/>
                         </FormControl>
                         <FormControl mb="5">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Peso</Text>
-                            <Input variant="underlined" w={'90%'} value={peso} />
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setPesoEdit(text)} value={pesoEdit} />
                         </FormControl>
                         <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'space-around' }}>
-                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalEditM(!modalEditM)}> Guardar  </Button>
+                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={upMascotaData}> Guardar  </Button>
                             <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setModalEditM(!modalEditM)}> Cancelar  </Button>
                         </View>
                     </View>
@@ -213,33 +261,33 @@ const styles = StyleSheet.create({
         height: '30px', width: '40%',
         fontWeight: 'bold',
         textAlign: 'center'
-    },table: {
+    }, table: {
         borderWidth: 1,
         borderColor: '#E2E2E2',
         marginVertical: 10,
-        textAlign:'center',
-      },
-      row: {
+        textAlign: 'center',
+    },
+    row: {
         flexDirection: 'row',
         borderBottomWidth: 1,
         borderColor: '#E2E2E2',
-      },
-      header: {
+    },
+    header: {
         fontWeight: 'bold',
         flex: 1,
         padding: 10,
         borderRightWidth: 1,
         borderColor: '#E2E2E2',
-        backgroundColor:'#1AB28E',
-        color:'white',
-        fontSize:'13px'
-      },
-      cell: {
+        backgroundColor: '#1AB28E',
+        color: 'white',
+        fontSize: '13px'
+    },
+    cell: {
         flex: 1,
         padding: 10,
         borderRightWidth: 1,
         borderColor: '#E2E2E2',
-        fontSize:'12px'
-        
-      },
+        fontSize: '12px'
+
+    },
 })

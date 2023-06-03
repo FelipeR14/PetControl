@@ -1,12 +1,16 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Switch, Modal, TouchableOpacity } from 'react-native';
-import { Box, Image, Text, NativeBaseProvider, ScrollView, Spacer, Avatar, Button, FormControl, Input,  } from "native-base";
+import { Box, Image, Text, NativeBaseProvider, ScrollView, Spacer, Avatar, Button, FormControl, Input, } from "native-base";
 import { initializeApp } from 'firebase/app';
 import { firebaseConfig } from '../../configfb';
-import { getFirestore, collection, getDocs } from 'firebase/firestore/lite';
+import {
+    getFirestore,
+    doc,
+    onSnapshot,
+    updateDoc
+} from "firebase/firestore";
 
-import {getDatabase, ref,set} from 'firebase/database';
-
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 const ConfigScreen = ({navigation}) => {
     const [isEnabled, setIsEnabled] = useState(false);
@@ -14,24 +18,67 @@ const ConfigScreen = ({navigation}) => {
     const [isEnabled2, setIsEnabled2] = useState(false);
     const toggleSwitch2 = () => setIsEnabled2(previousState => !previousState);
 
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const db = getFirestore(app);
+
     const [modalVisible, setModalVisible] = useState(false);
-    const [name, onChangeName] = React.useState('Felipe Rios');
-    const [email, onChangeEmail] = React.useState('jaretrios14@gmail.com');
-    const [tel, onChangeTel] = React.useState('449 265 3531');
-    const [dire, onChangeDire] = React.useState('Pozo Alto #121, Pozo Bravo Norte');
 
-           
+    const [userUid, setUserUid] = useState(null)
+    const [userName, setUserName] = useState("")
+    const [userEmail, setUserEmail] = useState("")
+    const [userDirec, setUserDirec] = useState("")
+    const [userTel, setUserTel] = useState("")
 
+    const [userNameEdit, setUserNameEdit] = useState("")
+    const [userEmailEdit, setUserEmailEdit] = useState("")
+    const [userDirecEdit, setUserDirecEdit] = useState("")
+    const [userTelEdit, setUserTelEdit] = useState("")
+
+    useEffect(() => {
+        onAuthStateChanged(auth, user => {
+            setUserUid(user.uid);
+
+            onSnapshot(doc(db, 'users', user.uid), doc => {
+                if (doc.data() !== undefined) {
+                    setUserName(doc.data().name)
+                    setUserEmail(doc.data().email)
+                    setUserDirec(doc.data().direccion === '' ? 'Dirección no establecida' : doc.data().direccion)
+                    setUserTel(doc.data().tel === '' ? 'Teléfono no establecido' : doc.data().tel)
+
+                    setUserNameEdit(doc.data().name)
+                    setUserEmailEdit(doc.data().email)
+                    setUserDirecEdit(doc.data().direccion)
+                    setUserTelEdit(doc.data().tel)
+                }
+            });
+        });
+    }, [userUid]);
+
+    const updateUserData = async () => {
+
+        const data = {
+            name: userNameEdit,
+            email: userEmailEdit,
+            direccion: userDirecEdit,
+            tel: userTelEdit
+        }
+
+        await updateDoc(doc(db, "users", userUid), data);
+
+        setModalVisible(!modalVisible)
+    }
         
     return (
         <View style={styles.VistaPrincipal}>
             <View style={styles.divPerfil}>
-                <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/userpic.jpg?alt=media&token=a219975f-db64-416a-aecd-cd93f7f387a6"}} > </Avatar>
+                <Avatar style={styles.avatar} source={{ uri: "https://firebasestorage.googleapis.com/v0/b/proyectopc-ed74f.appspot.com/o/userpic.jpg?alt=media&token=758620bf-a028-4e83-874a-4da997a0f100" }} > </Avatar>
                 <Spacer height={2} />
-                <Text style={styles.datoprin}> {name}</Text>
-                <Text style={styles.datossec}> {email} </Text>
-                <Text style={styles.datossec}> {tel} </Text>
-                <Text style={styles.datossec}> {dire} </Text>
+                <Text style={styles.datoprin}> {userName}</Text>
+                <Text style={styles.datossec}> {userEmail} </Text>
+                <Text style={styles.datossec}> {userTel} </Text>
+                <Text style={styles.datossec}> {userDirec} </Text>
                 <Spacer height={2} />
                 <Button style={styles.btnEditPerf} onPress={() => setModalVisible(true)}> Editar perfil </Button>
             </View>
@@ -100,33 +147,31 @@ const ConfigScreen = ({navigation}) => {
                 <View style={styles.centeredView}>
                     <View style={styles.modalView}>
                         <Text style={styles.tituloModal}>Editando datos</Text>
-                        <Image style={styles.fotoperfil} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/userpic.jpg?alt=media&token=a219975f-db64-416a-aecd-cd93f7f387a6"}} />
+                        <Image style={styles.fotoperfil} source={{ uri: "https://firebasestorage.googleapis.com/v0/b/proyectopc-ed74f.appspot.com/o/userpic.jpg?alt=media&token=758620bf-a028-4e83-874a-4da997a0f100" }} />
                         <FormControl mb="2" mt="5">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Nombre</Text>
-                            <Input variant="underlined"  w={'90%'} onChangeText={onChangeName} value={name}/>
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setUserNameEdit(text)} value={userNameEdit} />
                         </FormControl>
                         <FormControl mb="2">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Email</Text>
-                            <Input variant="underlined"  w={'90%'} onChangeText={onChangeEmail} value={email}/>
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setUserEmailEdit(text)} value={userEmailEdit} />
                         </FormControl>
                         <FormControl mb="2">
-                            <Text style={{fontSize:'10px',fontWeight:'500'}}>Teléfono</Text>
-                            <Input variant="underlined" w={'90%'} onChangeText={onChangeTel} value={tel}/>
+                            <Text style={{ fontSize: '10px', fontWeight: '500' }}>Dirección</Text>
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setUserDirecEdit(text)} value={userDirecEdit} />
                         </FormControl>
                         <FormControl mb="5">
-                            <Text style={{fontSize:'10px',fontWeight:'500'}}>Dirección</Text>
-                            <Input variant="underlined"  w={'90%'} onChangeText={onChangeDire} value={dire}/>
+                            <Text style={{ fontSize: '10px', fontWeight: '500' }}>Teléfono</Text>
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setUserTelEdit(text)} value={userTelEdit} />
                         </FormControl>
                         <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'space-around' }}>
-                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalVisible(!modalVisible)}> Guardar  </Button>
+                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => updateUserData()}> Guardar  </Button>
                             <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setModalVisible(!modalVisible)}> Cancelar  </Button>
                         </View>
                     </View>
                 </View>
             </Modal>
         </View>
-
-
     );
 }
 

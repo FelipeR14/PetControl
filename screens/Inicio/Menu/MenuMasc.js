@@ -1,32 +1,52 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Pressable, Avatar } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useRoute } from '@react-navigation/native';
+import { initializeApp } from 'firebase/app';
+import { firebaseConfig } from '../../../configfb';
+import { getFirestore,doc,onSnapshot,updateDoc } from "firebase/firestore";
 
 const MenuMasc = ({navigation}) => {
+    const route = useRoute();
+    const { mascota } = route.params;
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const [namem, setNamem] =  useState('');
+
+    useEffect(() => {
+        onSnapshot(doc(db, 'mascotas', mascota.id), doc => {
+            if (doc.data() !== undefined) {
+                setNamem(doc.data().nombremasc)
+            }
+        });
+    
+    }, []);
+
     return (
         <View style={styles.VistaPrincipal}>
             <View style={{paddingLeft:10}}>
-                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.goBack()} />
+                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate("InicioScreen")} />
             </View>
             <View style={styles.divDatos}>
-                <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/mascpic.jpg?alt=media&token=5b405f7e-99eb-43ee-add7-64c0b6e85826"}} > </Avatar>
-                <Text style={styles.datoprin}>Golfo</Text>
+                <Avatar style={styles.avatar} source={{uri:"https://firebasestorage.googleapis.com/v0/b/proyectopc-ed74f.appspot.com/o/mascpic.jpg?alt=media&token=0b07449e-215e-4e1d-a6f5-4cea516670b6"}} > </Avatar>
+                <Text style={styles.datoprin}> {namem} </Text>
             </View>
             <View style={styles.divOps}>
-                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Baño')}>
+                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Baño', {mascota: mascota})} key={mascota.id}>
                     <Ionicons name="paw-outline" color="#323232" size='42px' /> 
                     <Text style={styles.nomOp}>Baño</Text>
                 </Pressable>
-                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Revisión')}>
+                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Revisión', {mascota: mascota})} key={mascota.id}>
                     <Ionicons name="medkit-outline" color="#323232" size='42px' /> 
                     <Text style={styles.nomOp}>Revisión</Text>
                 </Pressable>
-                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Cartilla')}>
+                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Cartilla', {mascota: mascota})} key={mascota.id}>
                     <Ionicons name="folder-outline" color="#323232" size='42px' /> 
                     <Text style={styles.nomOp}>Cartilla</Text>
                 </Pressable>
-                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Receta')}>
+                <Pressable style={styles.divCard} onPress={() => navigation.navigate('Receta', {mascota: mascota})} key={mascota.id}>
                     <Ionicons name="document-text-outline" color="#323232" size='42px' />  
                     <Text style={styles.nomOp}>Receta</Text>
                 </Pressable>

@@ -1,20 +1,85 @@
-import React, { useState } from 'react'; 
+import React, { useEffect,useState } from 'react'; 
 import { StyleSheet, View,Modal } from 'react-native';
 import { FormControl,Input, Text, NativeBaseProvider, ScrollView, Spacer, Button } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useRoute } from '@react-navigation/native';
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../../../configfb";
+import "firebase/firestore";
+import {
+  getFirestore,updateDoc, addDoc,
+  doc,
+  setDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 
 const Revisión = ({navigation}) => {
+    const route = useRoute();
+    const { mascota } = route.params;
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
     const [modalrevision, setModalRevision] = useState(false);
     const [modaledit, setModalEdit] = useState(false);
 
-    const [descrip, onChangeDescrip] = React.useState('Revisión de herida');
-    const [fecha, onChangeFecha] = React.useState('05/02/23');
-    const [proxf, onChangeProxf] = React.useState('No necesaria');
-     
+    const [descrip, setDescrip] = React.useState('Revisión de herida');
+    const [fecha, setFecha] = React.useState('05/02/23');
+    const [proxf, setProxf] = React.useState('No necesaria');
+    
+
+    {/*const [revisiones, setRevisiones] = useState([]);
+    useEffect(() => {
+        const q = query(
+          collection(db, "revisiones"),
+          where("idMasc", "==", mascota.id)
+        );
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+          const revisionesData = [];
+          querySnapshot.forEach((doc) => {
+            const data = doc.data();
+            data.id = doc.id;
+            revisionesData.push(data);
+          });
+          setRevisiones(revisionesData);
+        });
+        return () => {
+          unsubscribe();
+        };
+      }, []); */}
+
+    const handleAddRevision = async () => {
+        const Revdata = {
+            descripcion: descrip,
+            fecha: fecha,
+            proxf: proxf,
+        };
+
+        const refRev = doc(db,'mascotas',mascota.id);
+        await addDoc(collection(refRev, 'revisiones'),Revdata);
+        setModalRevision(false);
+    }
+
+    const handleUpRevision = async () => {
+
+        const dataUp = {
+            descripcion: nwdescrip,
+            fecha: nwfecha,
+            proxf: nwproxf,
+        };
+
+        const refBaños = doc(collection(db, "barevisionesños"));
+        await updateDoc(refBaños, data);
+        setModalEdit(false);
+    }
+
     return (
         <View style={styles.VistaPrincipal}>
             <View style={styles.divBtn}>
-                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('Menú')} />
+                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('Menú', {mascota: mascota})} key={mascota.id} />
                 <Ionicons name="add-circle" color="#1AB28E" size='30px' onPress={() => setModalRevision(true)} />
             </View>
             <View style={styles.divCards}>
@@ -44,18 +109,18 @@ const Revisión = ({navigation}) => {
                         <Text style={styles.tituloModal}>Agregando datos</Text>
                         <FormControl mb="2" mt="5">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Descripción </Text>
-                            <Input variant="underlined"  w={'90%'}/>
+                            <Input variant="underlined"  w={'90%'} onChangeText={(text) => setDescrip(text)}/>
                         </FormControl>
                         <FormControl mb="2">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Fecha</Text>
-                            <Input variant="underlined"  w={'90%'}/>
+                            <Input variant="underlined"  w={'90%'} onChangeText={(text) => setFecha(text)}/>
                         </FormControl>
                         <FormControl mb="5">
                             <Text style={{fontSize:'10px',fontWeight:'500'}}>Próxima cita</Text>
-                            <Input variant="underlined" w={'90%'}/>
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setProxf(text)}/>
                         </FormControl>
                         <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'space-around' }}>
-                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalRevision(!modalrevision)}> Guardar  </Button>
+                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={handleAddRevision}> Guardar  </Button>
                             <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setModalRevision(!modalrevision)}> Cancelar  </Button>
                         </View>
                     </View>
@@ -70,15 +135,15 @@ const Revisión = ({navigation}) => {
                         <Text style={styles.tituloModal}>Editando datos</Text>
                         <FormControl mb="2" mt="5">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Descripción </Text>
-                            <Input variant="underlined"  w={'90%'} onChangeText={onChangeDescrip} value={descrip}/>
+                            <Input variant="underlined"  w={'90%'} onChangeText={(text) => setDescrip(text)}/>
                         </FormControl>
                         <FormControl mb="2">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Fecha</Text>
-                            <Input variant="underlined"  w={'90%'} onChangeText={onChangeFecha} value={fecha}/>
+                            <Input variant="underlined"  w={'90%'} onChangeText={(text) => setFecha(text)}/>
                         </FormControl>
                         <FormControl mb="5">
                             <Text style={{fontSize:'10px',fontWeight:'500'}}>Próxima cita</Text>
-                            <Input variant="underlined" w={'90%'} onChangeText={onChangeProxf} value={proxf}/>
+                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setProxf(text)}/>
                         </FormControl>
                         <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'space-around' }}>
                             <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalEdit(!modaledit)}> Guardar  </Button>

@@ -15,7 +15,7 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../configfb";
-import { getAuth } from "firebase/auth";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 import "firebase/firestore";
 import {
   getFirestore,
@@ -33,8 +33,6 @@ const HomeScreen = ({ navigation }) => {
   const user = auth.currentUser;
   const db = getFirestore(app);
 
-  const [nomus, setNomUs] = React.useState("FelipeZ");
-
   const [mascotas, setMascotas] = useState([]);
 
   const [agregarMasc, setAgregarMasc] = useState(false);
@@ -44,8 +42,22 @@ const HomeScreen = ({ navigation }) => {
   const [sexo, setSexo] = React.useState("");
   const [raza, setRaza] = React.useState("");
   const [peso, setPeso] = React.useState("");
+  const [userName, setUserName] = useState("")
+  const [userUid, setUserUid] = useState(null)
 
   useEffect(() => {
+
+    onAuthStateChanged(auth, user => {
+      setUserUid(user.uid);
+
+      onSnapshot(doc(db, 'users', user.uid), doc => {
+        if (doc.data() !== undefined) {
+          setUserName(doc.data().name);
+        }
+
+      });
+    });
+
     const q = query(
       collection(db, "mascotas"),
       where("idDueño", "==", user.uid)
@@ -64,7 +76,7 @@ const HomeScreen = ({ navigation }) => {
     return () => {
       unsubscribe();
     };
-  }, []);
+  }, [userUid]);
 
   const handleAddMasc = async () => {
     if (user !== null) {
@@ -98,7 +110,7 @@ const HomeScreen = ({ navigation }) => {
           <Text style={styles.textSaludo}> HOLA, </Text>
         </View>
         <View>
-          <Text style={styles.textName}> {nomus} </Text>
+          <Text style={styles.textName}> {userName} </Text>
         </View>
       </View>
 
@@ -119,7 +131,7 @@ const HomeScreen = ({ navigation }) => {
         <Spacer height={1} />
         <View style={styles.fotos}>
           {mascotas.map((mascota) => (
-            <Pressable onPress={() => navigation.navigate("Menú", mascota)} key={mascota.id}>
+            <Pressable onPress={() => navigation.navigate("Menú", {mascota: mascota})} key={mascota.id}> 
               <Box
                 maxW="80"
                 rounded="lg"
@@ -135,7 +147,7 @@ const HomeScreen = ({ navigation }) => {
                       source={{
                         uri: "https://firebasestorage.googleapis.com/v0/b/proyectopc-ed74f.appspot.com/o/mascpic.jpg?alt=media&token=0b07449e-215e-4e1d-a6f5-4cea516670b6",
                       }}
-                    //   source={require(mascota.img)}
+                      //   source={require(mascota.img)}
                       width={110}
                       height={100}
                       alt="Mascota 1"
@@ -160,42 +172,6 @@ const HomeScreen = ({ navigation }) => {
             </Pressable>
           ))}
 
-          {/* <Box
-            maxW="80"
-            rounded="lg"
-            overflow="hidden"
-            borderColor="coolGray.200"
-            borderWidth="2"
-            _web={{ shadow: 5, borderWidth: 0 }}
-            _light={{ backgroundColor: "gray.50" }}
-          >
-            <Box>
-              <Center>
-                <Image
-                  source={{
-                    uri: "https://firebasestorage.googleapis.com/v0/b/petcontrol-866d0.appspot.com/o/mascpic.jpg?alt=media&token=5b405f7e-99eb-43ee-add7-64c0b6e85826",
-                  }}
-                  width={110}
-                  height={100}
-                  alt="Mascota 1"
-                />
-              </Center>
-              <Center
-                bg="#1AB28E"
-                _text={{
-                  color: "warmGray.50",
-                  fontWeight: "700",
-                  fontSize: "s",
-                }}
-                position="center"
-                bottom="0"
-                px="3"
-                py="1.5"
-              >
-                Donita
-              </Center>
-            </Box>
-          </Box> */}
         </View>
       </View>
 

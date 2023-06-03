@@ -2,8 +2,11 @@ import React, { useState } from 'react';
 import { StyleSheet, View,Modal } from 'react-native';
 import {Text, NativeBaseProvider, ScrollView, Button } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useRoute } from '@react-navigation/native';
 
 const Receta = ({navigation}) => {
+    const route = useRoute();
+    const { mascota } = route.params;
 
     const [descrip, onChangeDescrip] = React.useState('');
     const [fecha, onChangeFecha] = React.useState('');
@@ -11,7 +14,7 @@ const Receta = ({navigation}) => {
     return (
         <View style={styles.VistaPrincipal}>
             <View style={styles.divBtn}>
-                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('Menú')}/>
+                <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('Menú', { mascota: mascota })} key={mascota.id}/>
                 <Ionicons name="add-circle" color="#1AB28E" size='30px' onPress={() => abrirCam()} />
             </View>
             <View style={styles.divCards}>
