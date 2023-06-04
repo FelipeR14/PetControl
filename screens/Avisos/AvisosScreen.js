@@ -6,10 +6,10 @@ import { Linking } from 'react-native';
 const AvisosScreen = () => {
     const openLink1 = () => {
         Linking.openURL('https://www.facebook.com/ReactDevelopersz');
-      };
-      const openLink2 = () => {
+    };
+    const openLink2 = () => {
         Linking.openURL('https://www.twitter.com/reactnative');
-      };
+    };
     return (
         <View style={styles.VistaPrincipal}>
             <View style={styles.divAvisos}>

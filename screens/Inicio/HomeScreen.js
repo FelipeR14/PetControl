@@ -34,6 +34,7 @@ const HomeScreen = ({ navigation }) => {
   const db = getFirestore(app);
 
   const [mascotas, setMascotas] = useState([]);
+  const [recetas, setRecetas] = useState([]);
 
   const [agregarMasc, setAgregarMasc] = useState(false);
 
@@ -46,7 +47,6 @@ const HomeScreen = ({ navigation }) => {
   const [userUid, setUserUid] = useState(null)
 
   useEffect(() => {
-
     onAuthStateChanged(auth, user => {
       setUserUid(user.uid);
 
@@ -181,6 +181,7 @@ const HomeScreen = ({ navigation }) => {
         </View>
         <Spacer height={1} />
         <View style={styles.cardsrecetas}>
+          
           <Pressable style={styles.recetacard}>
             <View
               style={{
@@ -197,7 +198,7 @@ const HomeScreen = ({ navigation }) => {
               style={{ flexDirection: "column", width: "auto", height: "auto" }}
             >
               <Text style={{ fontWeight: "bold", fontSize: "12px" }}>
-                Receta de Golfo
+                Receta de {mascota.nombremasc}
               </Text>
               <Text style={{ color: "#6E6F6F", fontSize: "10px" }}>
                 5 de Feb del 2023

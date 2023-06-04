@@ -1,21 +1,60 @@
 import React, { useState } from 'react';
 import { StyleSheet, View,Modal } from 'react-native';
-import {Text, NativeBaseProvider, ScrollView, Button } from "native-base";
+import {Text, NativeBaseProvider, ScrollView, Button,AlertDialog } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useRoute } from '@react-navigation/native';
+import { initializeApp } from "firebase/app";
+import { firebaseConfig } from "../../../configfb";
+import moment from 'moment';
+import { Linking } from 'react-native';
+import "firebase/firestore";
+import {
+  getFirestore,updateDoc, addDoc,
+  doc,
+  setDoc,
+  collection,
+  onSnapshot,
+  query,
+  where,
+} from "firebase/firestore";
 
 const Receta = ({navigation}) => {
     const route = useRoute();
     const { mascota } = route.params;
+    
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-    const [descrip, onChangeDescrip] = React.useState('');
-    const [fecha, onChangeFecha] = React.useState('');
-     
-    return (
+    const [isOpen, setIsOpen] = React.useState(false);
+    const onClose = () => setIsOpen(false);
+    const cancelRef = React.useRef(null);
+    
+    const openpdf = () => {
+        Linking.openURL('https://drive.google.com/file/d/1wYktiPdDiLRxrd4khkYaTfajkOsrRhP-/view?usp=sharing');
+    };
+
+    const currentDate = moment().format('DD-MM-YYYY');
+    const handleAddReceta = async () => {
+        
+        const RecetaData = {
+            recetanom: 'Receta de ' + mascota.nombremasc,
+            fecha: currentDate,
+        } 
+
+        const refRecetas = doc(db,'mascotas',mascota.id);
+
+        await addDoc(collection(refRecetas, 'recetas'),RecetaData);
+        console.log("Receta creada para: " + mascota.nombremasc);
+        setIsOpen(true)
+    }
+
+
+
+    return ( 
         <View style={styles.VistaPrincipal}>
             <View style={styles.divBtn}>
                 <Ionicons name="arrow-back-outline" color="#1AB28E" size='40px' onPress={() => navigation.navigate('Menú', { mascota: mascota })} key={mascota.id}/>
-                <Ionicons name="add-circle" color="#1AB28E" size='30px' onPress={() => abrirCam()} />
+                <Ionicons name="add-circle" color="#1AB28E" size='30px' onPress={handleAddReceta} />
             </View>
             <View style={styles.divCards}>
                 <View style={styles.cardbaño}>
@@ -28,13 +67,28 @@ const Receta = ({navigation}) => {
                                 <Text style={{fontSize:'13px',fontWeight:'500'}}> 05/02/23 </Text>
                             </View> 
                             <View style={{flexDirection:'row',justifyContent:'flex-end',paddingRight:10,paddingTop:5,gap:5}}> 
-                                <Button style={styles.btnGuardar} _text={{ color: "white",fontSize:'13px' }} onPress={() => RevisarRec()}> Revisar  </Button>
+                                <Button style={styles.btnGuardar} _text={{ color: "white",fontSize:'13px' }} onPress={openpdf}> Revisar  </Button>
                                 <Button style={styles.btnCancelar} _text={{ color: "#1AB28E",fontSize:'13px' }} onPress={() => EliminarRec()}> Eliminar  </Button>                        
                             </View>
                         </View>
                     </View>
                 </View>
             </View>
+
+            <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={onClose}>
+                <AlertDialog.Content>
+                    <AlertDialog.CloseButton />
+                    <AlertDialog.Header>Receta añadidad</AlertDialog.Header>
+                    <AlertDialog.Body>
+                        La receta se guardó en la bd.
+                    </AlertDialog.Body>
+                    <AlertDialog.Footer>
+                        <Button colorScheme="info" onPress={() => setIsOpen(false)}>
+                            De acuerdo
+                        </Button>
+                    </AlertDialog.Footer>
+                </AlertDialog.Content>
+            </AlertDialog>
         </View>
     );
 }
