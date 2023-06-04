@@ -32,24 +32,27 @@ const Baño = ({ navigation }) => {
 
     const [baños, setBaños] = useState([]);
     useEffect(() => {
+
+        const getBanios = async (id) => {
+            const subCollectionRef = collection(
+              db,"mascotas",id,"baños"
+            );
         
-        const q = query(
-          collection(db, "mascotas", mascota.id, "baños"),
-          where("id", "==", mascota.id)
-        );
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-          const bañosData = [];
-          querySnapshot.forEach((doc) => {
-            const data = doc.data();
-            data.id = doc.id;
-            bañosData.push(data);
-          });
-          setBaños(bañosData);
-        });
-        return () => {
-          unsubscribe();
-        };
-      }, []);
+            // Obtiene los documentos de la subcolección
+            const querySnapshot = await getDocs(subCollectionRef);
+        
+            // Recorre los documentos obtenidos
+            const bañosData = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                data.id = doc.id;
+                bañosData.push(data);
+            });
+            setBaños(bañosData);
+          };
+        getBanios();
+
+    }, []);
 
     const handleAddBaño = async () => {
         const BañoData = {
