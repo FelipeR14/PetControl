@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect,useState } from 'react';
 import { StyleSheet, View,Modal } from 'react-native';
 import {Text, NativeBaseProvider, ScrollView, Button,AlertDialog } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -9,13 +9,17 @@ import moment from 'moment';
 import { Linking } from 'react-native';
 import "firebase/firestore";
 import {
-  getFirestore,updateDoc, addDoc,
+  getFirestore,
+  updateDoc,
+  addDoc,
   doc,
   setDoc,
   collection,
   onSnapshot,
   query,
   where,
+  getDocs,
+  deleteDoc,
 } from "firebase/firestore";
 
 const Receta = ({navigation}) => {
@@ -46,7 +50,70 @@ const Receta = ({navigation}) => {
         await addDoc(collection(refRecetas, 'recetas'),RecetaData);
         console.log("Receta creada para: " + mascota.nombremasc);
         setIsOpen(true)
+        const subCollectionRef = collection(db, "mascotas", mascota.id, "recetas");
+
+            // Obtiene los documentos de la subcolección
+            const querySnapshot = await getDocs(subCollectionRef);
+
+            // Recorre los documentos obtenidos
+            const recetasData = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                data.id = doc.id;
+                recetasData.push(data);
+            });
+            console.log(recetasData);
+            setRecetas(recetasData);
     }
+
+
+    const [recetas, setRecetas] = useState([]);
+    useEffect(() => {
+        const getRecetas = async (id) => {
+            const subCollectionRef = collection(db, "mascotas", id, "recetas");
+
+            // Obtiene los documentos de la subcolección
+            const querySnapshot = await getDocs(subCollectionRef);
+
+            // Recorre los documentos obtenidos
+            const recetasData = [];
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                data.id = doc.id;
+                recetasData.push(data);
+            });
+            console.log(recetasData);
+            setRecetas(recetasData);
+        };
+        getRecetas(mascota.id);
+    }, []);
+
+    const getRecetasRender = async (id) => {
+        const subCollectionRef = collection(db, "mascotas", id, "recetas");
+    
+        // Obtiene los documentos de la subcolección
+        const querySnapshot = await getDocs(subCollectionRef);
+    
+        // Recorre los documentos obtenidos
+        const recetasData = [];
+        querySnapshot.forEach((doc) => {
+          const data = doc.data();
+          data.id = doc.id;
+          recetasData.push(data);
+        });
+        console.log(recetasData);
+        setRecetas(recetasData);
+    };
+    const handleDelete = async (idReceta) => {
+        await deleteDoc(doc(db, "mascotas", mascota.id, "recetas", idReceta))
+          .then(() => {
+            getRecetasRender(mascota.id);
+            console.log("eliminado");
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    };
 
 
 
@@ -57,28 +124,30 @@ const Receta = ({navigation}) => {
                 <Ionicons name="add-circle" color="#1AB28E" size='30px' onPress={handleAddReceta} />
             </View>
             <View style={styles.divCards}>
-                <View style={styles.cardbaño}>
-                    <View style={{flexDirection:'row',gap:5,}}>
-                        <View style={styles.lineaVerde}>
-                        </View>
-                        <View style={{flexDirection:'column',}}>
-                            <View style={{flexDirection:'column',justifyContent:'flex-start',paddingRight:100}}> 
-                                <Text style={{fontWeight:'bold',fontSize:'17px'}}> Receta de Golfo </Text>
-                                <Text style={{fontSize:'13px',fontWeight:'500'}}> 05/02/23 </Text>
-                            </View> 
-                            <View style={{flexDirection:'row',justifyContent:'flex-end',paddingRight:10,paddingTop:5,gap:5}}> 
-                                <Button style={styles.btnGuardar} _text={{ color: "white",fontSize:'13px' }} onPress={openpdf}> Revisar  </Button>
-                                <Button style={styles.btnCancelar} _text={{ color: "#1AB28E",fontSize:'13px' }} onPress={() => EliminarRec()}> Eliminar  </Button>                        
+                {recetas.map((receta) => (
+                    <View style={styles.cardbaño}>
+                        <View style={{ flexDirection: 'row', gap: 5, }}>
+                            <View style={styles.lineaVerde}>
+                            </View>
+                            <View style={{ flexDirection: 'column', }}>
+                                <View style={{ flexDirection: 'column', justifyContent: 'flex-start', paddingRight: 100 }}>
+                                    <Text style={{ fontWeight: 'bold', fontSize: '17px' }}> {receta.recetanom} </Text>
+                                    <Text style={{ fontSize: '13px', fontWeight: '500' }}> {receta.fecha} </Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'flex-end', paddingRight: 10, paddingTop: 5, gap: 5 }}>
+                                    <Button style={styles.btnGuardar} _text={{ color: "white", fontSize: '13px' }} onPress={openpdf}> Revisar  </Button>
+                                    <Button style={styles.btnCancelar} _text={{ color: "#1AB28E", fontSize: '13px' }} onPress={() => handleDelete(receta.id)}> Eliminar  </Button>
+                                </View>
                             </View>
                         </View>
                     </View>
-                </View>
+                ))}
             </View>
 
             <AlertDialog leastDestructiveRef={cancelRef} isOpen={isOpen} onClose={onClose}>
                 <AlertDialog.Content>
                     <AlertDialog.CloseButton />
-                    <AlertDialog.Header>Receta añadidad</AlertDialog.Header>
+                    <AlertDialog.Header>Receta añadida</AlertDialog.Header>
                     <AlertDialog.Body>
                         La receta se guardó en la bd.
                     </AlertDialog.Body>
@@ -105,7 +174,7 @@ const styles = StyleSheet.create({
         flexDirection:'row',paddingLeft:30,paddingRight:30,paddingTop:10, width:'100%',height:'auto',gap:40,display:'flex',flexWrap:'wrap'
     },
     cardbaño: {
-        width:'auto',height:'auto',flexDirection:'row', backgroundColor:'#F6F6F6', borderRadius:'10px', justifyContent:'space-between',gap:50,
+        width:'auto',height:'auto',flexDirection:'column', backgroundColor:'#F6F6F6', borderRadius:'10px', justifyContent:'space-between',gap:50,
         paddingBottom:10,paddingTop:10,
         shadowColor: '#000',
         shadowOffset: {

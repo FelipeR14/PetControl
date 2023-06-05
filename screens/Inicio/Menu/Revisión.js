@@ -1,5 +1,5 @@
 import React, { useEffect,useState } from 'react'; 
-import { StyleSheet, View,Modal } from 'react-native';
+import { StyleSheet, View,Modal,Pressable } from 'react-native';
 import { FormControl,Input, Text, NativeBaseProvider, ScrollView, Spacer, Button } from "native-base";
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useRoute } from '@react-navigation/native';
@@ -7,13 +7,17 @@ import { initializeApp } from "firebase/app";
 import { firebaseConfig } from "../../../configfb";
 import "firebase/firestore";
 import {
-  getFirestore,updateDoc, addDoc,
+  getFirestore,
+  updateDoc,
+  addDoc,
   doc,
   setDoc,
   collection,
   onSnapshot,
   query,
   where,
+  getDocs,
+  deleteDoc,
 } from "firebase/firestore";
 
 const Revisión = ({navigation}) => {
@@ -30,26 +34,31 @@ const Revisión = ({navigation}) => {
     const [fecha, setFecha] = React.useState('05/02/23');
     const [proxf, setProxf] = React.useState('No necesaria');
     
-
-    {/*const [revisiones, setRevisiones] = useState([]);
+    const [descripEdit, setDescripEdit] = React.useState("");
+    const [fechaEdit, setFechaEdit] = React.useState("");
+    const [proxfEdit, setProxfEdit] = React.useState("");
+    const [revEdit, setRevEdit] = useState("");
+    
+    const [revisiones, setRevisiones] = useState([]);
     useEffect(() => {
-        const q = query(
-          collection(db, "revisiones"),
-          where("idMasc", "==", mascota.id)
-        );
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-          const revisionesData = [];
-          querySnapshot.forEach((doc) => {
+        const getRevs = async (id) => {
+        const subCollectionRef = collection(db, "mascotas", id, "revisiones");
+
+        // Obtiene los documentos de la subcolección
+        const querySnapshot = await getDocs(subCollectionRef);
+
+        // Recorre los documentos obtenidos
+        const revsData = [];
+        querySnapshot.forEach((doc) => {
             const data = doc.data();
             data.id = doc.id;
-            revisionesData.push(data);
-          });
-          setRevisiones(revisionesData);
+            revsData.push(data);
         });
-        return () => {
-          unsubscribe();
+        console.log(revsData);
+        setRevisiones(revsData);
         };
-      }, []); */}
+        getRevs(mascota.id);
+    }, []);
 
     const handleAddRevision = async () => {
         const Revdata = {
@@ -58,23 +67,73 @@ const Revisión = ({navigation}) => {
             proxf: proxf,
         };
 
-        const refRev = doc(db,'mascotas',mascota.id);
-        await addDoc(collection(refRev, 'revisiones'),Revdata);
+        const refRevs = doc(db,'mascotas',mascota.id);
+
+        await addDoc(collection(refRevs, 'revisiones'),Revdata);
         setModalRevision(false);
+
+        const subCollectionRef = collection(db, "mascotas", mascota.id, "revisiones");
+        // Obtiene los documentos de la subcolección
+        const querySnapshot = await getDocs(subCollectionRef);
+
+        // Recorre los documentos obtenidos
+        const revisionsData = [];
+        querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        data.id = doc.id;
+        revisionsData.push(data);
+        });
+        console.log(revisionsData);
+        setRevisiones(revisionsData);
     }
 
-    const handleUpRevision = async () => {
+    const getRevsRender = async (id) => {
+        const subCollectionRef = collection(db, "mascotas", id, "revisiones");
 
-        const dataUp = {
-            descripcion: nwdescrip,
-            fecha: nwfecha,
-            proxf: nwproxf,
+        // Obtiene los documentos de la subcolección
+        const querySnapshot = await getDocs(subCollectionRef);
+
+        // Recorre los documentos obtenidos
+        const revisionsData = [];
+        querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        data.id = doc.id;
+        revisionsData.push(data);
+        });
+        console.log(revisionsData);
+        setRevisiones(revisionsData);
+    };
+
+    const handleDelete = async (idRevision) => {
+        await deleteDoc(doc(db, "mascotas", mascota.id, "revisiones", idRevision))
+        .then(() => {
+            getRevsRender(mascota.id);
+            console.log("eliminado");
+        })
+        .catch((error) => {
+            console.log(error);
+        });
+    };
+
+    const handleEditModal = (revision) => {
+        setModalEdit(true);
+        setDescripEdit(revision.descripcion);
+        setFechaEdit(revision.fecha);
+        setProxfEdit(revision.proxf);
+        setRevEdit(revision.id);
+    };
+
+    const handleEdit = async () => {
+        const data = {
+          descripcion: descripEdit,
+          fecha: fechaEdit,
+          proxf: proxfEdit,
         };
-
-        const refBaños = doc(collection(db, "barevisionesños"));
-        await updateDoc(refBaños, data);
-        setModalEdit(false);
-    }
+    
+        await updateDoc(doc(db, "mascotas", mascota.id, "revisiones", revEdit), data);
+        getRevsRender(mascota.id);
+        setModalEdit(!modaledit);
+    }; 
 
     return (
         <View style={styles.VistaPrincipal}>
@@ -83,22 +142,25 @@ const Revisión = ({navigation}) => {
                 <Ionicons name="add-circle" color="#1AB28E" size='30px' onPress={() => setModalRevision(true)} />
             </View>
             <View style={styles.divCards}>
-                <View style={styles.cardbaño}>
-                    <View style={{flexDirection:'row',gap:5,}}>
-                        <View style={styles.lineaVerde}>
+                {revisiones.map((rev) => (
+                    <View style={styles.cardbaño}>
+                        <View style={{flexDirection:'row',gap:5,}}>
+                            <View style={styles.lineaVerde}>
+                            </View>
+                            <View style={{flexDirection:'column'}}>
+                                <Text style={{fontWeight:'bold',fontSize:'17px'}}> {rev.descripcion} </Text>
+                                <Text style={{fontSize:'13px',fontWeight:'500'}}> {rev.fecha} </Text>
+                                <Text style={{fontSize:'10px',fontWeight:'500'}}> {rev.proxf} </Text>
+                            </View>
                         </View>
-                        <View style={{flexDirection:'column'}}>
-                            <Text style={{fontWeight:'bold',fontSize:'17px'}}> Revisión de herida </Text>
-                            <Text style={{fontSize:'13px',fontWeight:'500'}}> 05/02/23 </Text>
-                            <Text style={{fontSize:'10px',fontWeight:'500'}}> Próxima fecha: No necesaria </Text>
+                        <View style={{flexDirection:'column',alignContent:'center',paddingRight:5,}}>
+                            <Pressable> <Ionicons name="create-outline" size='25px' onPress={() => handleEditModal(rev)} /> </Pressable>
+                            <Spacer height={1} />
+                            <Pressable onPress={() => handleDelete(rev.id)}> <Ionicons name="close-circle" color="#B20A0A" size='25px' /> </Pressable>
+                                                    
                         </View>
                     </View>
-                    <View style={{flexDirection:'column',alignContent:'center',paddingRight:5,}}>
-                        <Ionicons name="create-outline" size='25px' onPress={() => setModalEdit(true)} />
-                        <Spacer height={1} />
-                        <Ionicons name="close-circle" color="#B20A0A" size='25px' />                        
-                    </View>
-                </View>
+                ))}
             </View>
             <Modal
                 animationType="slide"
@@ -135,21 +197,21 @@ const Revisión = ({navigation}) => {
                         <Text style={styles.tituloModal}>Editando datos</Text>
                         <FormControl mb="2" mt="5">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Descripción </Text>
-                            <Input variant="underlined"  w={'90%'} onChangeText={(text) => setDescrip(text)}/>
+                            <Input variant="underlined"  w={'90%'} value={descripEdit} onChangeText={(text) => setDescripEdit(text)}/>
                         </FormControl>
                         <FormControl mb="2">
                             <Text style={{ fontSize: '10px', fontWeight: '500' }}>Fecha</Text>
-                            <Input variant="underlined"  w={'90%'} onChangeText={(text) => setFecha(text)}/>
+                            <Input variant="underlined"  w={'90%'} value={fechaEdit} onChangeText={(text) => setFechaEdit(text)}/>
                         </FormControl>
                         <FormControl mb="5">
                             <Text style={{fontSize:'10px',fontWeight:'500'}}>Próxima cita</Text>
-                            <Input variant="underlined" w={'90%'} onChangeText={(text) => setProxf(text)}/>
+                            <Input variant="underlined" w={'90%'} value={proxfEdit} onChangeText={(text) => setProxfEdit(text)}/>
                         </FormControl>
                         <View style={{ flexDirection: 'row', gap: 10, justifyContent: 'space-around' }}>
-                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => setModalEdit(!modaledit)}> Guardar  </Button>
+                            <Button style={styles.btnGuardar} _text={{ color: "white" }} onPress={() => handleEdit()}> Guardar  </Button>
                             <Button style={styles.btnCancelar} _text={{ color: "#1AB28E" }} onPress={() => setModalEdit(!modaledit)}> Cancelar  </Button>
                         </View>
-                    </View>
+                    </View> 
                 </View>
             </Modal>
         </View>
