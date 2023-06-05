@@ -100,7 +100,7 @@ const HomeScreen = ({ navigation }) => {
     } else {
       // No hay usuario autenticado, realiza alguna acción si es necesario
       console.log("No hay usuario autenticado");
-    }
+    } 
   };
 
   return (
@@ -198,7 +198,7 @@ const HomeScreen = ({ navigation }) => {
               style={{ flexDirection: "column", width: "auto", height: "auto" }}
             >
               <Text style={{ fontWeight: "bold", fontSize: "12px" }}>
-                Receta de {mascota.nombremasc}
+                Receta de golfo
               </Text>
               <Text style={{ color: "#6E6F6F", fontSize: "10px" }}>
                 5 de Feb del 2023
